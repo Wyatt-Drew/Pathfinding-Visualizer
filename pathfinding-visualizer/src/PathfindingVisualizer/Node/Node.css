@@ -64,7 +64,7 @@
   color: black;
 }
 .arrow {
-  color: 'black',
+  color: black;
 }
 
 @keyframes shortestPath {

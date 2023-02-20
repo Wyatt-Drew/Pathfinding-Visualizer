@@ -11,6 +11,8 @@ const START_NODE_ROW = 10;
 const START_NODE_COL = 15;
 const FINISH_NODE_ROW = 10;
 const FINISH_NODE_COL = 35;
+const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+const icon = <ArrowBackIosIcon/>;
 
 export default class PathfindingVisualizer extends Component {
   constructor() {
@@ -81,27 +83,15 @@ export default class PathfindingVisualizer extends Component {
   addSVG(element)
   {
     // Create a new SVG element
-    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    // svg.setAttribute('width', '100');
-    // svg.setAttribute('height', '100');
 
     // Create a new Material UI icon component and render it into the SVG element
-    const icon = <ArrowBackIosIcon style={{ fontSize: 100 }} />;
+    
     ReactDOM.render(icon, svg);
-
+    svg.style.width = "100%";
+    svg.style.height = "100%";
     // Add the SVG container to the document
     element.appendChild(svg);
   }
-  // animateShortestPath(nodesInShortestPathOrder) {
-  //   for (let i = 0; i < nodesInShortestPathOrder.length; i++) {
-  //     setTimeout(() => {
-  //       const node = nodesInShortestPathOrder[i];
-  //       document.getElementById(`node-${node.row}-${node.col}`).className =
-  //         'node node-shortest-path';
-  //     }, 50 * i);
-  //   }
-  // }
-
 
   visualizeDijkstra() {
     const {grid} = this.state;
