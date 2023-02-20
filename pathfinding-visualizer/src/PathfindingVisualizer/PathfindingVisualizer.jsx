@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
+import ReactDOM from 'react-dom';
 import Node from './Node/Node';
 import {dijkstra, getNodesInShortestPathOrder} from '../algorithms/dijkstra';
+
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 import './PathfindingVisualizer.css';
 
@@ -58,11 +61,47 @@ export default class PathfindingVisualizer extends Component {
     for (let i = 0; i < nodesInShortestPathOrder.length; i++) {
       setTimeout(() => {
         const node = nodesInShortestPathOrder[i];
-        document.getElementById(`node-${node.row}-${node.col}`).className =
-          'node node-shortest-path';
+        const element = document.getElementById(`node-${node.row}-${node.col}`);
+        if (element) {
+          if (node.isStart) {
+            element.className = 'node node-shortest-path start';
+            
+          } else if (node.isFinish) {
+            element.className = 'node node-shortest-path finish';
+          } else {
+            element.className = 'node node-shortest-path';
+            this.addSVG(element);
+            // element.innerHTML = '<ArrowBackIosIcon/></ArrowBackIosIcon>';
+          }
+        }
       }, 50 * i);
     }
   }
+
+  addSVG(element)
+  {
+    // Create a new SVG element
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    // svg.setAttribute('width', '100');
+    // svg.setAttribute('height', '100');
+
+    // Create a new Material UI icon component and render it into the SVG element
+    const icon = <ArrowBackIosIcon style={{ fontSize: 100 }} />;
+    ReactDOM.render(icon, svg);
+
+    // Add the SVG container to the document
+    element.appendChild(svg);
+  }
+  // animateShortestPath(nodesInShortestPathOrder) {
+  //   for (let i = 0; i < nodesInShortestPathOrder.length; i++) {
+  //     setTimeout(() => {
+  //       const node = nodesInShortestPathOrder[i];
+  //       document.getElementById(`node-${node.row}-${node.col}`).className =
+  //         'node node-shortest-path';
+  //     }, 50 * i);
+  //   }
+  // }
+
 
   visualizeDijkstra() {
     const {grid} = this.state;
