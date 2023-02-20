@@ -60,12 +60,28 @@ function getAllNodes(grid) {
 
 // Backtracks from the finishNode to find the shortest path.
 // Only works when called *after* the dijkstra method above.
-export function getNodesInShortestPathOrder(finishNode) {
+export function getNodesInShortestPathOrder(finishNode, grid) {
   const nodesInShortestPathOrder = [];
   let currentNode = finishNode;
+  let north = 1;
+  let east = 2;
+  let south = 3;
+  let west = 4;
   while (currentNode !== null) {
+    if (currentNode.previousNode !== null)
+    {
+      //Record which direction it is moving
+      if (currentNode.row < currentNode.previousNode.row) currentNode.direction = north;
+      if (currentNode.row > currentNode.previousNode.row) currentNode.direction = south;
+      if (currentNode.col < currentNode.previousNode.col) currentNode.direction = west;
+      if (currentNode.col > currentNode.previousNode.col) currentNode.direction = east;
+      console.log(currentNode.direction);
+    }
+    
+    //Shift to the next node.
     nodesInShortestPathOrder.unshift(currentNode);
     currentNode = currentNode.previousNode;
+
   }
   return nodesInShortestPathOrder;
 }

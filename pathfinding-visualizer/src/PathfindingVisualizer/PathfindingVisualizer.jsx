@@ -3,7 +3,10 @@ import ReactDOM from 'react-dom';
 import Node from './Node/Node';
 import {dijkstra, getNodesInShortestPathOrder} from '../algorithms/dijkstra';
 
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 import './PathfindingVisualizer.css';
 
@@ -11,8 +14,15 @@ const START_NODE_ROW = 10;
 const START_NODE_COL = 15;
 const FINISH_NODE_ROW = 10;
 const FINISH_NODE_COL = 35;
+// Creating arrows
 const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-const icon = <ArrowBackIosIcon/>;
+svg.style.width = "100%";
+svg.style.height = "100%";
+
+const down = <KeyboardArrowDownIcon/>;
+const up = <KeyboardArrowUpIcon/>;
+const left = <KeyboardArrowLeftIcon/>;
+const right = <KeyboardArrowRightIcon/>;
 
 export default class PathfindingVisualizer extends Component {
   constructor() {
@@ -65,30 +75,34 @@ export default class PathfindingVisualizer extends Component {
         const node = nodesInShortestPathOrder[i];
         const element = document.getElementById(`node-${node.row}-${node.col}`);
         if (element) {
-          if (node.isStart) {
-            element.className = 'node node-shortest-path start';
-            
-          } else if (node.isFinish) {
-            element.className = 'node node-shortest-path finish';
-          } else {
             element.className = 'node node-shortest-path';
-            this.addSVG(element);
-            // element.innerHTML = '<ArrowBackIosIcon/></ArrowBackIosIcon>';
-          }
+            this.addSVG(element, node.direction);
         }
       }, 50 * i);
     }
   }
 
-  addSVG(element)
+  addSVG(element, direction)
   {
-    // Create a new SVG element
+    // console.log("direction" + direction);
+    switch (direction)
+    {
+      case 1:
+        ReactDOM.render(up, svg);
+        break;
+      case 2:
+        ReactDOM.render(right, svg);
+        break;
+      case 3:
+        ReactDOM.render(down, svg);
+        break;
+      case 4:
+        ReactDOM.render(left, svg);
+        break;
+    }
 
-    // Create a new Material UI icon component and render it into the SVG element
-    
-    ReactDOM.render(icon, svg);
-    svg.style.width = "100%";
-    svg.style.height = "100%";
+    // render icon into the SVG element
+    //ReactDOM.render(left, svg);
     // Add the SVG container to the document
     element.appendChild(svg);
   }
@@ -98,7 +112,7 @@ export default class PathfindingVisualizer extends Component {
     const startNode = grid[START_NODE_ROW][START_NODE_COL];
     const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
     const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
-    const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
+    const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode,grid);
     this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
   }
 
