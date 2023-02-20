@@ -2,6 +2,11 @@
 // in which they were visited. Also makes nodes point back to their
 // previous node, effectively allowing us to compute the shortest path
 // by backtracking from the finish node.
+
+//Note: Normally Dijkstra's algorithm would be implemented with something like a minheap 
+//for efficiency.  Here I have implemented it with an array which I sort each time because
+//we have a relatively small number of nodes.
+
 export function dijkstra(grid, startNode, finishNode) {
   const visitedNodesInOrder = [];
   startNode.distance = 0;
