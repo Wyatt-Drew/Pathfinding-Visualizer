@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import './Node.css';
+import SportsScoreIcon from '@mui/icons-material/SportsScore';
 
 export default class Node extends Component {
   render() {
@@ -22,6 +23,8 @@ export default class Node extends Component {
       ? 'node-wall'
       : '';
 
+
+    const nodeContent = isFinish ? <SportsScoreIcon></SportsScoreIcon>: null;
     return (
       <div
         id={`node-${row}-${col}`}
@@ -30,7 +33,9 @@ export default class Node extends Component {
         onMouseDown={() => onMouseDown(row, col)}
         onMouseEnter={() => onMouseEnter(row, col)}
         // onMouseUp={() => onMouseUp()}>
-        ></div>
+        >
+        {nodeContent}
+        </div>
     );
   }
 }

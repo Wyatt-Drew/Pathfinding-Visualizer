@@ -95,8 +95,12 @@ export default class PathfindingVisualizer extends Component {
         const node = nodesInShortestPathOrder[i];
         const element = document.getElementById(`node-${node.row}-${node.col}`);
         if (element) {
+          if (node.isFinish) {
+            element.innerHTML = "";
+          } 
             element.className = 'node node-shortest-path';
             this.addSVG(element, node.direction);
+            // element.innerHTML = '<ArrowBackIosIcon/></ArrowBackIosIcon>';
         }
       }, 50 * i);
     }
