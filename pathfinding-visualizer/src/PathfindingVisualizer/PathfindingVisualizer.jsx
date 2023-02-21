@@ -44,15 +44,23 @@ export default class PathfindingVisualizer extends Component {
   componentDidMount() {
     const grid = getInitialGrid();
     this.setState({grid});
-    document.addEventListener("mousedown", this.handleMouseDown);
+    document.addEventListener("mousedown", this.handleClick);
     document.addEventListener("mouseup", this.handleMouseUp);
     console.log("mounted");
   }
-
-  handleMouseDown(event) {
+  //Note: Even though it might seem like these two functions should be one.
+  //This handleClick and handleMouseDown work together to ensure responsiveness.
+  //handleClick() circumvents default browser behaviour which prevents events when
+  //dragging divs.  handleMouseDown() ensures that even the div that you already entered
+  //counts for placing a wall there.
+  handleClick(event)
+  {
     event.preventDefault();
-    console.log("down");
     mouseIsPressed= true;
+  }
+  handleMouseDown(row, col) {
+    const newGrid = getNewGridWithWallToggled(this.state.grid, row, col);
+    this.setState({grid: newGrid});
   }
   handleMouseEnter(row, col) {
     if (!mouseIsPressed) return;
@@ -63,7 +71,6 @@ export default class PathfindingVisualizer extends Component {
   handleMouseUp(event) {
     event.preventDefault();
     mouseIsPressed= false;
-    console.log("up");
   }
 
   animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder) {
@@ -151,7 +158,7 @@ export default class PathfindingVisualizer extends Component {
                       isStart={isStart}
                       isWall={isWall}
                       mouseIsPressed={mouseIsPressed}
-                      // onMouseDown={(row, col) => this.handleMouseDown(row, col)}
+                      onMouseDown={(row, col) => this.handleMouseDown(row, col)}
                       onMouseEnter={(row, col) =>
                         this.handleMouseEnter(row, col)
                       }
