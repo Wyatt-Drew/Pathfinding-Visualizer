@@ -16,13 +16,20 @@ const FINISH_NODE_ROW = 10;
 const FINISH_NODE_COL = 35;
 // Creating arrows
 const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-svg.style.width = "100%";
+// const startsvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+// svg.className = "svgClass";
 svg.style.height = "100%";
-
+svg.style.width = "100%";
+// startsvg.style.height = "100%";
+// startsvg.style.width = "100%";
 const down = <KeyboardArrowDownIcon/>;
 const up = <KeyboardArrowUpIcon/>;
 const left = <KeyboardArrowLeftIcon/>;
 const right = <KeyboardArrowRightIcon/>;
+// ReactDOM.render(right, startsvg);
+// document.getElementById(`node-${START_NODE_ROW}-${START_NODE_COL}`).appendChild(startsvg);
+// ReactDOM.render(right, svg);
+// startNode.appendChild(svg);    
 
 export default class PathfindingVisualizer extends Component {
   constructor() {
@@ -36,6 +43,7 @@ export default class PathfindingVisualizer extends Component {
   componentDidMount() {
     const grid = getInitialGrid();
     this.setState({grid});
+
   }
 
   handleMouseDown(row, col) {
@@ -110,6 +118,8 @@ export default class PathfindingVisualizer extends Component {
   visualizeDijkstra() {
     const {grid} = this.state;
     const startNode = grid[START_NODE_ROW][START_NODE_COL];
+    ReactDOM.render(right, svg);
+    document.getElementById(`node-${START_NODE_ROW}-${START_NODE_COL}`).appendChild(svg);
     const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
     const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode,grid);
@@ -153,7 +163,12 @@ export default class PathfindingVisualizer extends Component {
       </>
     );
   }
+
 }
+
+
+
+
 
 const getInitialGrid = () => {
   const grid = [];
