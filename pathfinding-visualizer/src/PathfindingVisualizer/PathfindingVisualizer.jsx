@@ -30,6 +30,7 @@ const right = <KeyboardArrowRightIcon/>;
 // document.getElementById(`node-${START_NODE_ROW}-${START_NODE_COL}`).appendChild(startsvg);
 // ReactDOM.render(right, svg);
 // startNode.appendChild(svg);    
+var mouseIsPressed = false;
 
 export default class PathfindingVisualizer extends Component {
   constructor() {
@@ -43,22 +44,26 @@ export default class PathfindingVisualizer extends Component {
   componentDidMount() {
     const grid = getInitialGrid();
     this.setState({grid});
-
+    document.addEventListener("mousedown", this.handleMouseDown);
+    document.addEventListener("mouseup", this.handleMouseUp);
+    console.log("mounted");
   }
 
-  handleMouseDown(row, col) {
-    const newGrid = getNewGridWithWallToggled(this.state.grid, row, col);
-    this.setState({grid: newGrid, mouseIsPressed: true});
+  handleMouseDown(event) {
+    event.preventDefault();
+    console.log("down");
+    mouseIsPressed= true;
   }
-
   handleMouseEnter(row, col) {
-    if (!this.state.mouseIsPressed) return;
+    if (!mouseIsPressed) return;
     const newGrid = getNewGridWithWallToggled(this.state.grid, row, col);
     this.setState({grid: newGrid});
   }
-
-  handleMouseUp() {
-    this.setState({mouseIsPressed: false});
+  
+  handleMouseUp(event) {
+    event.preventDefault();
+    mouseIsPressed= false;
+    console.log("up");
   }
 
   animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder) {
@@ -109,8 +114,6 @@ export default class PathfindingVisualizer extends Component {
         break;
     }
 
-    // render icon into the SVG element
-    //ReactDOM.render(left, svg);
     // Add the SVG container to the document
     element.appendChild(svg);
   }
@@ -148,11 +151,11 @@ export default class PathfindingVisualizer extends Component {
                       isStart={isStart}
                       isWall={isWall}
                       mouseIsPressed={mouseIsPressed}
-                      onMouseDown={(row, col) => this.handleMouseDown(row, col)}
+                      // onMouseDown={(row, col) => this.handleMouseDown(row, col)}
                       onMouseEnter={(row, col) =>
                         this.handleMouseEnter(row, col)
                       }
-                      onMouseUp={() => this.handleMouseUp()}
+                      // onMouseUp={() => this.handleMouseUp()}
                       row={row}></Node>
                   );
                 })}
