@@ -16,20 +16,13 @@ const FINISH_NODE_ROW = 10;
 const FINISH_NODE_COL = 35;
 // Creating arrows
 const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-// const startsvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-// svg.className = "svgClass";
 svg.style.height = "100%";
 svg.style.width = "100%";
-// startsvg.style.height = "100%";
-// startsvg.style.width = "100%";
+
 const down = <KeyboardArrowDownIcon/>;
 const up = <KeyboardArrowUpIcon/>;
 const left = <KeyboardArrowLeftIcon/>;
-const right = <KeyboardArrowRightIcon/>;
-// ReactDOM.render(right, startsvg);
-// document.getElementById(`node-${START_NODE_ROW}-${START_NODE_COL}`).appendChild(startsvg);
-// ReactDOM.render(right, svg);
-// startNode.appendChild(svg);    
+const right = <KeyboardArrowRightIcon/>; 
 var mouseIsPressed = false;
 
 export default class PathfindingVisualizer extends Component {
@@ -95,7 +88,7 @@ export default class PathfindingVisualizer extends Component {
         const node = nodesInShortestPathOrder[i];
         const element = document.getElementById(`node-${node.row}-${node.col}`);
         if (element) {
-          if (node.isFinish) {
+          if (node.isFinish || node.isStart) {
             element.innerHTML = "";
           } 
             element.className = 'node node-shortest-path';
@@ -132,8 +125,6 @@ export default class PathfindingVisualizer extends Component {
   visualizeDijkstra() {
     const {grid} = this.state;
     const startNode = grid[START_NODE_ROW][START_NODE_COL];
-    ReactDOM.render(right, svg);
-    document.getElementById(`node-${START_NODE_ROW}-${START_NODE_COL}`).appendChild(svg);
     const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
     const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode,grid);

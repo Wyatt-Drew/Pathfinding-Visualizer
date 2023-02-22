@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import './Node.css';
 import SportsScoreIcon from '@mui/icons-material/SportsScore';
+import TimeToLeaveIcon from '@mui/icons-material/TimeToLeave';
 
 export default class Node extends Component {
   render() {
@@ -24,7 +25,10 @@ export default class Node extends Component {
       : '';
 
 
-    const nodeContent = isFinish ? <SportsScoreIcon></SportsScoreIcon>: null;
+    const nodeContent = isFinish ? <SportsScoreIcon></SportsScoreIcon>
+    :isStart ? <TimeToLeaveIcon></TimeToLeaveIcon>
+    : null;
+
     return (
       <div
         id={`node-${row}-${col}`}

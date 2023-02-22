@@ -1,6 +1,6 @@
 {
   "name": "pathfinding-visualizer",
-  "homepage": "https://Wyatt-Drew.github.io/PathfindingVisualizer",
+  "homepage": "https://Wyatt-Drew.github.io/PathfindingVisualizer2",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -43,6 +43,8 @@
     ]
   },
   "devDependencies": {
+    "css-loader": "^6.7.3",
+    "file-loader": "^6.2.0",
     "gh-pages": "^5.0.0"
   }
 }
