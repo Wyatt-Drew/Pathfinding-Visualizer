@@ -55,13 +55,13 @@ export default class PathfindingVisualizer extends Component {
     mouseIsPressed= true;
   }
   handleMouseDown(row, col) {
-    const newGrid = getNewGridWithWallToggled(this.state.grid, row, col);
-    this.setState({grid: newGrid});
+    const newGrid = getNewGridWithWallToggled(this.state.grid, row, col, this.state.placingWall);
+    this.setState({grid: newGrid, placingWall: this.state.placingWall});
   }
   handleMouseEnter(row, col) {
     if (!mouseIsPressed) return;
     const newGrid = getNewGridWithWallToggled(this.state.grid, row, col, this.state.placingWall);
-    this.setState({grid: newGrid});
+    this.setState({grid: newGrid, placingWall: this.state.placingWall});
   }
   
   handleMouseUp(event) {
@@ -166,9 +166,9 @@ export default class PathfindingVisualizer extends Component {
         <div className = "container">
             <input type="radio" name="payment" id="Wall"/>
               <label for="Wall">
-                    <i aria-hidden="true"onClick={() => this.toggleIsPlacingWall(true)}><SquareIcon></SquareIcon>Wall</i> 
+                    <i aria-hidden="true"onClick={() => this.setState({ placingWall: true })}><SquareIcon></SquareIcon>Wall</i> 
               </label>
-              <input type="radio" name="payment" id="Weight" onClick={() => this.toggleIsPlacingWall(true)}/>
+              <input type="radio" name="payment" id="Weight" onClick={() => this.setState({ placingWall: false })}/>
               <label for="Weight">
               <i aria-hidden="true"><FitnessCenterIcon></FitnessCenterIcon>Weight</i>	
               </label> 
