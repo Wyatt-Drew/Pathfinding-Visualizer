@@ -25,8 +25,8 @@ export default class Node extends Component {
       : '';
 
 
-    const nodeContent = isFinish ? <SportsScoreIcon></SportsScoreIcon>
-    :isStart ? <TimeToLeaveIcon></TimeToLeaveIcon>
+    const nodeContent = isFinish ? <SportsScoreIcon className="node-svg"></SportsScoreIcon>
+    :isStart ? <TimeToLeaveIcon className="node-svg"></TimeToLeaveIcon>
     : null;
 
     return (
