@@ -26,6 +26,7 @@ const up = <KeyboardArrowUpIcon/>;
 const left = <KeyboardArrowLeftIcon/>;
 const right = <KeyboardArrowRightIcon/>; 
 var mouseIsPressed = false;
+var isPlacingWall = true;
 
 export default class PathfindingVisualizer extends Component {
   constructor() {
@@ -33,6 +34,7 @@ export default class PathfindingVisualizer extends Component {
     this.state = {
       grid: [],
       mouseIsPressed: false,
+      // isPlacingWall: true,
     };
   }
 
@@ -57,7 +59,7 @@ export default class PathfindingVisualizer extends Component {
     this.setState({grid: newGrid});
   }
   handleMouseEnter(row, col) {
-    if (!mouseIsPressed || row == -1) return;
+    if (!mouseIsPressed) return;
     const newGrid = getNewGridWithWallToggled(this.state.grid, row, col);
     this.setState({grid: newGrid});
   }
@@ -66,6 +68,11 @@ export default class PathfindingVisualizer extends Component {
     event.preventDefault();
     mouseIsPressed= false;
   }
+
+  // toggleIsPlacingWall(newBool)
+  // {
+  //   this.setState({ isPlacingWall: newBool });
+  // }
 
   animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder) {
     for (let i = 0; i <= visitedNodesInOrder.length; i++) {
@@ -159,9 +166,9 @@ export default class PathfindingVisualizer extends Component {
         <div className = "container">
             <input type="radio" name="payment" id="Wall" checked/>
               <label for="Wall">
-                    <i aria-hidden="true"><SquareIcon></SquareIcon>Wall</i> 
+                    <i aria-hidden="true" onClick={() => isPlacingWall = true}><SquareIcon></SquareIcon>Wall</i> 
               </label>
-              <input type="radio" name="payment" id="Weight"/>
+              <input type="radio" name="payment" id="Weight" onClick={() => isPlacingWall = false}/>
               <label for="Weight">
               <i aria-hidden="true"><FitnessCenterIcon></FitnessCenterIcon>Weight</i>	
               </label> 
@@ -227,6 +234,7 @@ const createNode = (col, row) => {
     distance: Infinity,
     isVisited: false,
     isWall: false,
+    isWeight: false,
     previousNode: null,
   };
 };
@@ -236,7 +244,8 @@ const getNewGridWithWallToggled = (grid, row, col) => {
   const node = newGrid[row][col];
   const newNode = {
     ...node,
-    isWall: !node.isWall,
+    isWall: (!node.isWall  && isPlacingWall),
+    isWeight: (!node.isWeight && !isPlacingWall),
   };
   newGrid[row][col] = newNode;
   return newGrid;
