@@ -27,13 +27,13 @@ export function dijkstra(grid, startNode, finishNode) {
 }
 
 function sortNodesByDistance(unvisitedNodes) {
-  unvisitedNodes.sort((nodeA, nodeB) => nodeA.distance - nodeB.distance);
+  unvisitedNodes.sort((nodeA, nodeB) => (nodeA.distance + nodeA.isWeight) - (nodeB.distance + nodeB.isWeight));
 }
 
 function updateUnvisitedNeighbors(node, grid) {
   const unvisitedNeighbors = getUnvisitedNeighbors(node, grid);
   for (const neighbor of unvisitedNeighbors) {
-    neighbor.distance = node.distance + 1;
+    neighbor.distance = node.distance + 1 + neighbor.isWeight;
     neighbor.previousNode = node;
   }
 }
