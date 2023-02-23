@@ -55,12 +55,12 @@ export default class PathfindingVisualizer extends Component {
   }
   handleMouseDown(row, col) {
     const newGrid = getNewGridWithWallToggled(this.state.grid, row, col, this.state.placingWall);
-    this.setState({grid: newGrid, placingWall: this.state.placingWall});
+    this.setState({grid: newGrid});
   }
   handleMouseEnter(row, col) {
     if (!mouseIsPressed) return;
     const newGrid = getNewGridWithWallToggled(this.state.grid, row, col, this.state.placingWall);
-    this.setState({grid: newGrid, placingWall: this.state.placingWall});
+    this.setState({grid: newGrid});
   }
   
   handleMouseUp(event) {
@@ -130,6 +130,9 @@ export default class PathfindingVisualizer extends Component {
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode,grid);
     this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
   }
+  handleRadioToggle = () => {
+    this.setState({ placingWall: !this.state.placingWall });
+  };
 
   render() {
     const {grid, mouseIsPressed} = this.state;
@@ -138,9 +141,9 @@ export default class PathfindingVisualizer extends Component {
       <>
         <div className='container'>
             <a href="https://wyatt-drew.github.io/">
-              <button className="button-33" role="button">Homepage</button>
+              <button className="button-33">Homepage</button>
             </a>
-            <button className="button-33" role="button" onClick={() => this.visualizeDijkstra()}>
+            <button className="button-33"onClick={() => this.visualizeDijkstra()}>
               Visualize Dijkstra's Algorithm
             </button>
         </div>
@@ -158,19 +161,16 @@ export default class PathfindingVisualizer extends Component {
                 onMouseDown={() => {}}onMouseEnter={() => {}}></Node>Wall Node</div>
         </div>
         <div className = "container">
-            <input type="radio" name="payment" id="Wall" defaultChecked/>
-              <label for="Wall">
-                    <i aria-hidden="true"onClick={() => this.setState({ placingWall: true })}><SquareIcon></SquareIcon>Wall</i> 
+            <input type="radio" name="placing" id="Wall" checked={this.state.placingWall}onChange={this.handleRadioToggle}/>
+              <label htmlFor="Wall" id = "wallButton">
+                    <i aria-hidden="true"><SquareIcon></SquareIcon>Wall</i> 
               </label>
-              <input type="radio" name="payment" id="Weight" onClick={() => this.setState({ placingWall: false })}/>
-              <label for="Weight">
+              <div></div>
+              <input type="radio" name="placing" id="Weight" checked={!this.state.placingWall}onChange={this.handleRadioToggle}/>
+              <label htmlFor="Weight" id = "weightButton">
               <i aria-hidden="true"><FitnessCenterIcon></FitnessCenterIcon>Weight</i>	
               </label> 
         </div>
-
-
-
-
 
         <div className="grid">
           {grid.map((row, rowIdx) => {
