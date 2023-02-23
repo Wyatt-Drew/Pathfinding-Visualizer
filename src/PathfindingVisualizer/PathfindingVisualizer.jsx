@@ -135,12 +135,15 @@ export default class PathfindingVisualizer extends Component {
 
     return (
       <>
-        <a href="https://wyatt-drew.github.io/">
-          <button>Homepage</button>
-        </a>
-        <button onClick={() => this.visualizeDijkstra()}>
-          Visualize Dijkstra's Algorithm
-        </button>
+        <div className='container'>
+            <a href="https://wyatt-drew.github.io/">
+              <button className="button-33" role="button">Homepage</button>
+            </a>
+            <button className="button-33" role="button" onClick={() => this.visualizeDijkstra()}>
+              Visualize Dijkstra's Algorithm
+            </button>
+        </div>
+
 
 
         <div className = 'container'>
