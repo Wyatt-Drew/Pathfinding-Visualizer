@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import './Node.css';
 import SportsScoreIcon from '@mui/icons-material/SportsScore';
 import TimeToLeaveIcon from '@mui/icons-material/TimeToLeave';
+import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 
 export default class Node extends Component {
   render() {
@@ -15,6 +16,7 @@ export default class Node extends Component {
       onMouseUp,
       row,
       direction,
+      isWeight,
     } = this.props;
     const extraClassName = isFinish
       ? 'node-finish'
@@ -22,11 +24,14 @@ export default class Node extends Component {
       ? 'node-start'
       : isWall
       ? 'node-wall'
+      : isWeight
+      ? 'node-weight'
       : '';
 
 
     const nodeContent = isFinish ? <SportsScoreIcon className="node-svg"></SportsScoreIcon>
     :isStart ? <TimeToLeaveIcon className="node-svg"></TimeToLeaveIcon>
+    :isWeight ? <FitnessCenterIcon className="node-svg"></FitnessCenterIcon>
     : null;
 
     return (

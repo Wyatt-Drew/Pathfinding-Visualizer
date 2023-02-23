@@ -1,3 +1,38 @@
 .grid {
   margin: 100px 0 0;
 }
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+.box {
+  width: calc(20% - 10px); /* 20% - 10px gutter */
+  background-color: #ccc;
+  
+}
+/* toggle bettween options in header */
+*,*::before,*::after{
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+}
+input[type="radio"]{
+	-webkit-appearance:none;
+}
+label{
+  width: 10%;
+  flex-direction: row;
+  justify-content: center;
+	border:6px solid #009e52;
+	position: relative;
+	border-radius: 10px;
+	color: black;
+	transition: 0.5s;
+}
+input[type="radio"]:checked + label{
+	background-color: #009e52;
+	color: black;
+	box-shadow: 0 15px 45px rgba(24,249,141,0.2);
+}

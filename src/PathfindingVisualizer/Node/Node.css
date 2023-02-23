@@ -17,11 +17,11 @@
   display: block !important;
 }
 .node-finish {
-  background-color: red;
+  background-color: rgb(0, 217, 255);
 }
 
 .node-start {
-  background-color: green;
+  background-color: rgb(5, 252, 5);
 }
 
 .node-visited {

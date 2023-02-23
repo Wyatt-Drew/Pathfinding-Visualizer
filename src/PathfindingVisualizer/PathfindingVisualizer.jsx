@@ -7,6 +7,8 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
+import SquareIcon from '@mui/icons-material/Square';
 
 import './PathfindingVisualizer.css';
 
@@ -39,7 +41,6 @@ export default class PathfindingVisualizer extends Component {
     this.setState({grid});
     document.addEventListener("mousedown", this.handleClick);
     document.addEventListener("mouseup", this.handleMouseUp);
-    console.log("mounted");
   }
   //Note: Even though it might seem like these two functions should be one.
   //This handleClick and handleMouseDown work together to ensure responsiveness.
@@ -56,7 +57,7 @@ export default class PathfindingVisualizer extends Component {
     this.setState({grid: newGrid});
   }
   handleMouseEnter(row, col) {
-    if (!mouseIsPressed) return;
+    if (!mouseIsPressed || row == -1) return;
     const newGrid = getNewGridWithWallToggled(this.state.grid, row, col);
     this.setState({grid: newGrid});
   }
@@ -93,7 +94,6 @@ export default class PathfindingVisualizer extends Component {
           } 
             element.className = 'node node-shortest-path';
             this.addSVG(element, node.direction);
-            // element.innerHTML = '<ArrowBackIosIcon/></ArrowBackIosIcon>';
         }
       }, 50 * i);
     }
@@ -101,7 +101,6 @@ export default class PathfindingVisualizer extends Component {
 
   addSVG(element, direction)
   {
-    // console.log("direction" + direction);
     switch (direction)
     {
       case 1:
@@ -136,15 +135,45 @@ export default class PathfindingVisualizer extends Component {
 
     return (
       <>
+        <a href="https://wyatt-drew.github.io/">
+          <button>Homepage</button>
+        </a>
         <button onClick={() => this.visualizeDijkstra()}>
           Visualize Dijkstra's Algorithm
         </button>
+
+
+        <div className = 'container'>
+                <div className = "box"><Node isStart={true} row = {-1} col={-1}
+                onMouseDown={() => {}}onMouseEnter={() => {}}></Node>Start Node</div>
+                <div className = "box"><Node isFinish={true} row = {-1} col={-1}
+                onMouseDown={() => {}}onMouseEnter={() => {}}></Node>Target Node</div>
+                <div className = "box"><Node isWeight={true} row = {-1} col={-1}
+                onMouseDown={() => {}}onMouseEnter={() => {}}></Node>Weight Node</div>
+                <div className = "box"><Node isWall={true} row = {-1} col={-1}
+                onMouseDown={() => {}}onMouseEnter={() => {}}></Node>Wall Node</div>
+        </div>
+        <div className = "container">
+            <input type="radio" name="payment" id="Wall" checked/>
+              <label for="Wall">
+                    <i aria-hidden="true"><SquareIcon></SquareIcon>Wall</i> 
+              </label>
+              <input type="radio" name="payment" id="Weight"/>
+              <label for="Weight">
+              <i aria-hidden="true"><FitnessCenterIcon></FitnessCenterIcon>Weight</i>	
+              </label> 
+        </div>
+
+
+
+
+
         <div className="grid">
           {grid.map((row, rowIdx) => {
             return (
               <div key={rowIdx}>
                 {row.map((node, nodeIdx) => {
-                  const {row, col, isFinish, isStart, isWall} = node;
+                  const {row, col, isFinish, isStart, isWall, isWeight} = node;
                   return (
                     <Node
                       key={nodeIdx}
@@ -152,11 +181,10 @@ export default class PathfindingVisualizer extends Component {
                       isFinish={isFinish}
                       isStart={isStart}
                       isWall={isWall}
+                      isWeight={isWeight}
                       mouseIsPressed={mouseIsPressed}
                       onMouseDown={(row, col) => this.handleMouseDown(row, col)}
-                      onMouseEnter={(row, col) =>
-                        this.handleMouseEnter(row, col)
-                      }
+                      onMouseEnter={(row, col) =>this.handleMouseEnter(row, col)}
                       // onMouseUp={() => this.handleMouseUp()}
                       row={row}></Node>
                   );
