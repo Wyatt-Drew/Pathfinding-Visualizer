@@ -34,7 +34,7 @@ export default class PathfindingVisualizer extends Component {
     this.state = {
       grid: [],
       mouseIsPressed: false,
-      // isPlacingWall: true,
+      placingWall: true,
     };
   }
 
@@ -60,7 +60,7 @@ export default class PathfindingVisualizer extends Component {
   }
   handleMouseEnter(row, col) {
     if (!mouseIsPressed) return;
-    const newGrid = getNewGridWithWallToggled(this.state.grid, row, col);
+    const newGrid = getNewGridWithWallToggled(this.state.grid, row, col, this.state.placingWall);
     this.setState({grid: newGrid});
   }
   
@@ -69,10 +69,10 @@ export default class PathfindingVisualizer extends Component {
     mouseIsPressed= false;
   }
 
-  // toggleIsPlacingWall(newBool)
-  // {
-  //   this.setState({ isPlacingWall: newBool });
-  // }
+  toggleIsPlacingWall(newBool)
+  {
+    this.setState({ placingWall: newBool });
+  }
 
   animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder) {
     for (let i = 0; i <= visitedNodesInOrder.length; i++) {
@@ -164,11 +164,11 @@ export default class PathfindingVisualizer extends Component {
                 onMouseDown={() => {}}onMouseEnter={() => {}}></Node>Wall Node</div>
         </div>
         <div className = "container">
-            <input type="radio" name="payment" id="Wall" checked/>
+            <input type="radio" name="payment" id="Wall"/>
               <label for="Wall">
-                    <i aria-hidden="true" onClick={() => isPlacingWall = true}><SquareIcon></SquareIcon>Wall</i> 
+                    <i aria-hidden="true"onClick={() => this.toggleIsPlacingWall(true)}><SquareIcon></SquareIcon>Wall</i> 
               </label>
-              <input type="radio" name="payment" id="Weight" onClick={() => isPlacingWall = false}/>
+              <input type="radio" name="payment" id="Weight" onClick={() => this.toggleIsPlacingWall(true)}/>
               <label for="Weight">
               <i aria-hidden="true"><FitnessCenterIcon></FitnessCenterIcon>Weight</i>	
               </label> 
@@ -239,13 +239,13 @@ const createNode = (col, row) => {
   };
 };
 
-const getNewGridWithWallToggled = (grid, row, col) => {
+const getNewGridWithWallToggled = (grid, row, col,placingWall) => {
   const newGrid = grid.slice();
   const node = newGrid[row][col];
   const newNode = {
     ...node,
-    isWall: (!node.isWall  && isPlacingWall),
-    isWeight: (!node.isWeight && !isPlacingWall),
+    isWall: (!node.isWall  && placingWall),
+    isWeight: (!node.isWeight && !placingWall),
   };
   newGrid[row][col] = newNode;
   return newGrid;
