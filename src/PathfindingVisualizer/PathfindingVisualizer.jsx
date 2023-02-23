@@ -26,7 +26,6 @@ const up = <KeyboardArrowUpIcon/>;
 const left = <KeyboardArrowLeftIcon/>;
 const right = <KeyboardArrowRightIcon/>; 
 var mouseIsPressed = false;
-var isPlacingWall = true;
 
 export default class PathfindingVisualizer extends Component {
   constructor() {
@@ -67,11 +66,6 @@ export default class PathfindingVisualizer extends Component {
   handleMouseUp(event) {
     event.preventDefault();
     mouseIsPressed= false;
-  }
-
-  toggleIsPlacingWall(newBool)
-  {
-    this.setState({ placingWall: newBool });
   }
 
   animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder) {
@@ -164,7 +158,7 @@ export default class PathfindingVisualizer extends Component {
                 onMouseDown={() => {}}onMouseEnter={() => {}}></Node>Wall Node</div>
         </div>
         <div className = "container">
-            <input type="radio" name="payment" id="Wall"/>
+            <input type="radio" name="payment" id="Wall" defaultChecked/>
               <label for="Wall">
                     <i aria-hidden="true"onClick={() => this.setState({ placingWall: true })}><SquareIcon></SquareIcon>Wall</i> 
               </label>
