@@ -122,7 +122,7 @@ export default class PathfindingVisualizer extends Component {
     element.appendChild(svg);
   }
 
-  visualizeDijkstra() {
+  visualize() {
     const {grid} = this.state;
     const startNode = grid[START_NODE_ROW][START_NODE_COL];
     const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
@@ -143,9 +143,24 @@ export default class PathfindingVisualizer extends Component {
             <a href="https://wyatt-drew.github.io/">
               <button className="button-33">Homepage</button>
             </a>
-            <button className="button-33"onClick={() => this.visualizeDijkstra()}>
-              Visualize Dijkstra's Algorithm
+            <button className="button-33"onClick={() => this.visualize()}>
+              Visualize Dijkstra
             </button>
+            {/* 
+            add dropdown
+            add arrow for feedback
+            adapt visualize to handle any algorithm
+            */}
+            <div className="dropdown">
+              <button className="button-33"onClick={() => this.visualize()}>
+                Algorithms
+              </button>
+              {/* <div class="dropdown-content" style="left:0;">
+                <a href="#">Link 1</a>
+                <a href="#">Link 2</a>
+                <a href="#">Link 3</a>
+              </div> */}
+            </div>
         </div>
 
 
