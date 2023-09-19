@@ -36,6 +36,7 @@ export default class PathfindingVisualizer extends Component {
       mouseIsPressed: false,
       placingWall: true,
     };
+    this.visualize = this.visualize.bind(this);
   }
 
   componentDidMount() {
@@ -140,7 +141,7 @@ export default class PathfindingVisualizer extends Component {
 
     return (
       <>
-        <Menu></Menu>
+        <Menu visualize={this.visualize}></Menu>
         <div className = 'container' style={{ marginTop: '1px' }}>
                 <div className = "box"><Node isStart={true} row = {-1} col={-1}
                 onMouseDown={() => {}}onMouseEnter={() => {}}></Node>Start Node</div>

@@ -8,18 +8,18 @@ import './Dropdown.css';
           <li className="nav__submenu-item "id='startButtonDijkstra'>
             <button className='button-01'>Dijkstra's Algorithm</button>
           </li>
-          <li className="nav__submenu-item " id='startButtonAStar2'>
+          {/* <li className="nav__submenu-item " id='startButtonAStar2'>
             <button className='button-01'>A* Search</button>
-          </li>
-          <li className="nav__submenu-item " id='startButtonGreedy'>
+          </li> */}
+          {/* <li className="nav__submenu-item " id='startButtonGreedy'>
             <button className='button-01'>Greedy Best-first Search</button>
-          </li>
+          </li> */}
           <li className="nav__submenu-item " id='startButtonBFS'>
             <button className='button-01'>Breadth-first Search</button>
           </li>
-          <li className="nav__submenu-item " id='startButtonDFS'>
+          {/* <li className="nav__submenu-item " id='startButtonDFS'>
             <button className='button-01'>Depth-first Search</button>
-          </li>
+          </li> */}
         </ul>
       )
     }

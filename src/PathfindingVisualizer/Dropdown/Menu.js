@@ -14,7 +14,7 @@ class Menu extends Component {
               <Submenu />
             </li>
             <li className="nav__menu-item">
-              <button className='button-01' onClick={() => this.visualize()}>Visualize Dijkstra </button>
+              <button className='button-01' onClick={() => this.props.visualize()}>Visualize Dijkstra </button>
             </li>
           </ul>
         </nav>
