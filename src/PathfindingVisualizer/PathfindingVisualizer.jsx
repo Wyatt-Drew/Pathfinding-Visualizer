@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import Node from './Node/Node';
+import Menu from './Dropdown/Menu';
 import {dijkstra, getNodesInShortestPathOrder} from '../algorithms/dijkstra';
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -140,27 +141,9 @@ export default class PathfindingVisualizer extends Component {
     return (
       <>
         <div className='container'>
-            <a href="https://wyatt-drew.github.io/">
-              <button className="button-33">Homepage</button>
-            </a>
-            <button className="button-33"onClick={() => this.visualize()}>
-              Visualize Dijkstra
-            </button>
-            {/* 
-            add dropdown
-            add arrow for feedback
-            adapt visualize to handle any algorithm
-            */}
-            <div className="dropdown">
-              <button className="button-33"onClick={() => this.visualize()}>
-                Algorithms
-              </button>
-              {/* <div class="dropdown-content" style="left:0;">
-                <a href="#">Link 1</a>
-                <a href="#">Link 2</a>
-                <a href="#">Link 3</a>
-              </div> */}
-            </div>
+          <Menu></Menu>
+          {/* <div id="menu-container"></div>
+          ReactDOM.render(<Menu />,document.getElementById("menu-container")); */}
         </div>
 
 
@@ -259,3 +242,4 @@ const getNewGridWithWallToggled = (grid, row, col,placingWall) => {
   newGrid[row][col] = newNode;
   return newGrid;
 };
+
