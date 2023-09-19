@@ -141,7 +141,7 @@ export default class PathfindingVisualizer extends Component {
     return (
       <>
         <Menu></Menu>
-        <div className = 'container'>
+        <div className = 'container' style={{ marginTop: '1px' }}>
                 <div className = "box"><Node isStart={true} row = {-1} col={-1}
                 onMouseDown={() => {}}onMouseEnter={() => {}}></Node>Start Node</div>
                 <div className = "box"><Node isFinish={true} row = {-1} col={-1}

@@ -1,18 +1,22 @@
 .nav {
   background: #0d2035;
   color: #fff;
+
 }
 .nav__menu {
   margin: 0;
 }
 
 .nav__submenu {
+  padding-inline-start: 0px;
+  width: 30vh;
   display: none;
   position: absolute;
   background-color: #00aeef;
 }
 .nav__submenu-item {
   list-style: none;
+  
   &:hover {
     background: #2984ec;
   }
