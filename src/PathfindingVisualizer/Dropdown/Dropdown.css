@@ -1,5 +1,4 @@
 .nav {
-  display: inline-block;
   background: #0d2035;
   color: #fff;
 }
@@ -9,14 +8,11 @@
 
 .nav__submenu {
   display: none;
-  font-weight: 300;
-  text-transform: none;
-  display: none;
   position: absolute;
-  width: 180px;
   background-color: #00aeef;
 }
 .nav__submenu-item {
+  list-style: none;
   &:hover {
     background: #2984ec;
   }
@@ -27,7 +23,6 @@
   position: relative;
   &:hover {
     background-color: #00aeef;
-
     .nav__submenu {
       display: block;
     }
@@ -35,11 +30,9 @@
 }
 .button-01{
   background: none;
-  padding: 0 16px;
-  line-height: inherit;
+  border: none;
   cursor: pointer;
   color: #ecf0f1;
-  border: none;
   text-transform: uppercase;
 }
 
