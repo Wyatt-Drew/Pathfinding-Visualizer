@@ -140,10 +140,9 @@ export default class PathfindingVisualizer extends Component {
 
     return (
       <>
+      
         <div className='container'>
-          <Menu></Menu>
-          {/* <div id="menu-container"></div>
-          ReactDOM.render(<Menu />,document.getElementById("menu-container")); */}
+        <Menu></Menu>
         </div>
 
 

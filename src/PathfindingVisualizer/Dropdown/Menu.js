@@ -4,17 +4,17 @@ import Submenu from './Submenu';
 class Menu extends Component {  
     render() {
       return (
-        <nav className="nav">
+        <nav className="nav" id="menu-container">
           <ul className="nav__menu">
             <li className="nav__menu-item">
-              <a href="https://wyatt-drew.github.io/">Homepage</a>
+              <button className='button-01' href="https://wyatt-drew.github.io/">Homepage</button>
             </li>
             <li className="nav__menu-item">
-              <a href="#">Algorithms</a>
+              <button className='button-01'>Algorithms</button>
               <Submenu />
             </li>
             <li className="nav__menu-item">
-              <a href="#">Visualize Algorithm</a>
+              <button className='button-01' onClick={() => this.visualize()}>Visualize Dijkstra </button>
             </li>
           </ul>
         </nav>
