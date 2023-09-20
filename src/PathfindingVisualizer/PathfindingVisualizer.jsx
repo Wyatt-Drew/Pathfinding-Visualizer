@@ -70,7 +70,7 @@ export default class PathfindingVisualizer extends Component {
     mouseIsPressed= false;
   }
 
-  animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder) {
+  animatePath(visitedNodesInOrder, nodesInShortestPathOrder) {
     for (let i = 0; i <= visitedNodesInOrder.length; i++) {
       if (i === visitedNodesInOrder.length) {
         setTimeout(() => {
@@ -130,7 +130,7 @@ export default class PathfindingVisualizer extends Component {
     const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
     const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode,grid);
-    this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
+    this.animatePath(visitedNodesInOrder, nodesInShortestPathOrder);
   }
   handleRadioToggle = () => {
     this.setState({ placingWall: !this.state.placingWall });
