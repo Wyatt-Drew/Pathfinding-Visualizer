@@ -7,15 +7,23 @@
 //for efficiency.  Here I have implemented it with an array which I sort each time because
 //we have a relatively small number of nodes.
 
-export function dijkstra(grid, startNode, finishNode) {
+export function dijkstra(grid, startNode, finishNode, method) {
   const visitedNodesInOrder = [];
   startNode.distance = 0;
   const unvisitedNodes = getAllNodes(grid);
   while (!!unvisitedNodes.length) {
-    sortNodesByDistance(unvisitedNodes);
+    switch (method){
+      case 'dijkstra':
+        sortNodesByDistance(unvisitedNodes);
+        break;
+      case 'depthFirstSearch':
+        //Depth first search priority: up, right, down, left
+        sortNodesByDepth(unvisitedNodes);
+        break;
+    }
     const closestNode = unvisitedNodes.shift();
     // If we encounter a wall, we skip it.
-    if (closestNode.isWall) continue;
+    //if (closestNode.isWall) continue;
     // If the closest node is at a distance of infinity,
     // we must be trapped and should therefore stop.
     if (closestNode.distance === Infinity) return visitedNodesInOrder;
@@ -26,8 +34,14 @@ export function dijkstra(grid, startNode, finishNode) {
   }
 }
 
+//Returns the unvisted node with the lowest depth + weight
 function sortNodesByDistance(unvisitedNodes) {
   unvisitedNodes.sort((nodeA, nodeB) => (nodeA.distance + nodeA.isWeight) - (nodeB.distance + nodeB.isWeight));
+}
+//Returns the unvisted node with the highest depth
+function sortNodesByDepth(unvisitedNodes, currentNode) {
+  //getUnvisitedNeighbors(currentNode, grid);
+  //unvisitedNodes.sort((nodeA, nodeB) => (nodeB.distance) - (nodeA.distance));
 }
 
 function updateUnvisitedNeighbors(node, grid) {
@@ -41,10 +55,10 @@ function updateUnvisitedNeighbors(node, grid) {
 function getUnvisitedNeighbors(node, grid) {
   const neighbors = [];
   const {col, row} = node;
-  if (row > 0) neighbors.push(grid[row - 1][col]);
-  if (row < grid.length - 1) neighbors.push(grid[row + 1][col]);
-  if (col > 0) neighbors.push(grid[row][col - 1]);
-  if (col < grid[0].length - 1) neighbors.push(grid[row][col + 1]);
+  if (row > 0 && !grid[row - 1][col].isWall) neighbors.push(grid[row - 1][col]);
+  if (row < grid.length - 1 && !grid[row + 1][col].isWall) neighbors.push(grid[row + 1][col]);
+  if (col > 0 && !grid[row][col - 1].isWall) neighbors.push(grid[row][col - 1]);
+  if (col < grid[0].length - 1 && !grid[row][col + 1].isWall) neighbors.push(grid[row][col + 1]);
   return neighbors.filter(neighbor => !neighbor.isVisited);
 }
 
@@ -59,7 +73,7 @@ function getAllNodes(grid) {
 }
 
 // Backtracks from the finishNode to find the shortest path.
-// Only works when called *after* the dijkstra method above.
+// Only works when called *after* the search method above has found the finishnode.
 export function getNodesInShortestPathOrder(finishNode, grid) {
   const nodesInShortestPathOrder = [];
   let currentNode = finishNode;
