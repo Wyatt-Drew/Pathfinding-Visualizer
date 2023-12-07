@@ -9,21 +9,87 @@ export function runSearchAlgorithm(grid, startNode, finishNode, method) {
     switch (method){
       case 'dijkstra':
         return dijkstraSearch(grid, startNode, finishNode, visitedNodesInOrder, unvisitedNodes);
-        break;
       case 'depthFirstSearch':
         //Depth first search priority: up, right, down, left
         depthFirstSearch(startNode, finishNode, grid, visitedNodesInOrder);
         return visitedNodesInOrder;
-        break;
       case 'breathFirstSearch':
-        break;
+        breathFirstSearch(startNode, finishNode, grid, visitedNodesInOrder);
+        return visitedNodesInOrder;
       case 'aStar':
-        break;
+        return aStar(startNode, finishNode, grid, visitedNodesInOrder);
       default:
         console.error('Invalid search method');
         return [];
     }
   }
+
+  function aStar(startNode, finishNode, grid, visitedNodesInOrder) {
+    const openSet = [startNode];
+    const closedSet = [];
+  
+    while (!!openSet.length) {
+      sortNodesByAStarDistance(openSet, finishNode);
+      const currentNode = openSet.shift();
+  
+      if (currentNode.isVisited) continue;
+  
+      currentNode.isVisited = true;
+      visitedNodesInOrder.push(currentNode);
+  
+      if (currentNode === finishNode) return visitedNodesInOrder;
+  
+      closedSet.push(currentNode);
+  
+      const neighbors = getUnvisitedNeighbors(currentNode, grid);
+      for (const neighbor of neighbors) {
+        if (closedSet.includes(neighbor)) continue;
+  
+        const tentativeGScore = currentNode.distance + 1 + neighbor.isWeight;
+        if (!openSet.includes(neighbor) || tentativeGScore < neighbor.distance) {
+          neighbor.previousNode = currentNode;
+          neighbor.distance = tentativeGScore;
+          if (!openSet.includes(neighbor)) openSet.push(neighbor);
+        }
+      }
+    }
+  
+    return visitedNodesInOrder;
+  }
+  
+  // Helper function to sort nodes by A* distance (f = g + h).
+  function sortNodesByAStarDistance(openSet, finishNode) {
+    openSet.sort(
+      (nodeA, nodeB) =>
+        (nodeA.distance + nodeA.isWeight + heuristic(nodeA, finishNode)) -
+        (nodeB.distance + nodeB.isWeight + heuristic(nodeB, finishNode))
+    );
+  }
+  
+  // Helper function to calculate the heuristic (Manhattan distance) between two nodes.
+  function heuristic(nodeA, nodeB) {
+    return Math.abs(nodeA.row - nodeB.row) + Math.abs(nodeA.col - nodeB.col);
+  }
+  
+
+  function breathFirstSearch(startNode, finishNode, grid, visitedNodesInOrder) {
+    const queue = [];
+    queue.push(startNode);
+    while (queue.length > 0) {
+      const currentNode = queue.shift();
+      if (currentNode.isVisited) continue;
+      currentNode.isVisited = true;
+      visitedNodesInOrder.push(currentNode);
+      if (currentNode === finishNode) return visitedNodesInOrder;
+      const neighbors = getUnvisitedNeighbors(currentNode, grid);
+      for (const neighbor of neighbors) {
+        neighbor.previousNode = currentNode;
+        queue.push(neighbor);
+      }
+    }
+    return visitedNodesInOrder;
+  }
+
 
 //Note: Normally Dijkstra's algorithm would be implemented with something like a minheap 
 //for efficiency.  Here I have implemented it with an array which I sort each time because
@@ -50,8 +116,8 @@ function depthFirstSearch(node, finishNode, grid, visitedNodesInOrder) {
     return true;
   }
   const neighbors = getUnvisitedNeighbors(node, grid);
-  updateUnvisitedNeighbors(node, grid); //Assign previousNodes and distances
   for (const neighbor of neighbors) {
+    neighbor.previousNode = node;
     if (!neighbor.isVisited) {
       if (depthFirstSearch(neighbor, finishNode, grid, visitedNodesInOrder)) {
         return true;

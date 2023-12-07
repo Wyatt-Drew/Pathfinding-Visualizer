@@ -17,7 +17,9 @@ const START_NODE_COL = 15;
 const FINISH_NODE_ROW = 10;
 const FINISH_NODE_COL = 35;
 // const SEARCH_METHOD_DEBUG = 'dijkstra';
-const SEARCH_METHOD_DEBUG = 'depthFirstSearch';
+// const SEARCH_METHOD_DEBUG = 'depthFirstSearch';
+// const SEARCH_METHOD_DEBUG = 'breathFirstSearch';
+const SEARCH_METHOD_DEBUG = 'aStar';
 // Creating arrows
 const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 svg.style.height = "100%";
