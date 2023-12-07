@@ -2,17 +2,16 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import Node from './Node/Node';
 import Menu from './Dropdown/Menu';
+import './PathfindingVisualizer.css';
 import {dijkstra, getNodesInShortestPathOrder} from '../algorithms/dijkstra';
-
+//icons
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import SquareIcon from '@mui/icons-material/Square';
-
-import './PathfindingVisualizer.css';
-
+//Constants
 const START_NODE_ROW = 10;
 const START_NODE_COL = 15;
 const FINISH_NODE_ROW = 10;
@@ -21,7 +20,6 @@ const FINISH_NODE_COL = 35;
 const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 svg.style.height = "100%";
 svg.style.width = "100%";
-
 const down = <KeyboardArrowDownIcon/>;
 const up = <KeyboardArrowUpIcon/>;
 const left = <KeyboardArrowLeftIcon/>;
@@ -70,11 +68,13 @@ export default class PathfindingVisualizer extends Component {
     mouseIsPressed= false;
   }
 
-  animatePath(visitedNodesInOrder, nodesInShortestPathOrder) {
+  //Name: animateSearch
+  //Purpose: This function displays the order that nodes were visited.
+  animateSearch(visitedNodesInOrder, nodesInShortestPathOrder) {
     for (let i = 0; i <= visitedNodesInOrder.length; i++) {
       if (i === visitedNodesInOrder.length) {
         setTimeout(() => {
-          this.animateShortestPath(nodesInShortestPathOrder);
+          this.animateSolution(nodesInShortestPathOrder);
         }, 10 * i);
         return;
       }
@@ -86,7 +86,9 @@ export default class PathfindingVisualizer extends Component {
     }
   }
 
-  animateShortestPath(nodesInShortestPathOrder) {
+  //Name: animateSolution
+  //Purpose: This function displays the solution that was found.
+  animateSolution(nodesInShortestPathOrder) {
     for (let i = 0; i < nodesInShortestPathOrder.length; i++) {
       setTimeout(() => {
         const node = nodesInShortestPathOrder[i];
@@ -128,9 +130,12 @@ export default class PathfindingVisualizer extends Component {
     const {grid} = this.state;
     const startNode = grid[START_NODE_ROW][START_NODE_COL];
     const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
-    const visitedNodesInOrder = dijkstra(grid, startNode, finishNode,'dijkstra');
+    const visitedNodesInOrder = dijkstra(grid, startNode, finishNode,'depthFirstSearch');
+    // const visitedNodesInOrder = dijkstra(grid, startNode, finishNode,'dijkstra');
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode,grid);
-    this.animatePath(visitedNodesInOrder, nodesInShortestPathOrder);
+    this.animateSearch(visitedNodesInOrder, nodesInShortestPathOrder);
+    // this.animateSearch(visitedNodesInOrder, nodesInShortestPathOrder);
+    //this.animateSolution(nodesInShortestPathOrder);
   }
   handleRadioToggle = () => {
     this.setState({ placingWall: !this.state.placingWall });
@@ -194,10 +199,6 @@ export default class PathfindingVisualizer extends Component {
   }
 
 }
-
-
-
-
 
 const getInitialGrid = () => {
   const grid = [];

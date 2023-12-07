@@ -9,19 +9,26 @@
 
 export function dijkstra(grid, startNode, finishNode, method) {
   const visitedNodesInOrder = [];
-  startNode.distance = 0;
   const unvisitedNodes = getAllNodes(grid);
-  while (!!unvisitedNodes.length) {
     switch (method){
       case 'dijkstra':
-        sortNodesByDistance(unvisitedNodes);
+        return dijkstraSearch(grid, startNode, finishNode, visitedNodesInOrder, unvisitedNodes);
         break;
       case 'depthFirstSearch':
         //Depth first search priority: up, right, down, left
-        sortNodesByDepth(unvisitedNodes);
+        depthFirstSearch(startNode, finishNode, grid, visitedNodesInOrder);
+        return visitedNodesInOrder;
         break;
     }
+  }
+
+function dijkstraSearch(grid, startNode, finishNode, visitedNodesInOrder, unvisitedNodes) {
+  startNode.distance = 0;
+  while (!!unvisitedNodes.length) {
+    sortNodesByDistance(unvisitedNodes);
     const closestNode = unvisitedNodes.shift();
+    // If we encounter a wall, we skip it.
+    if (closestNode.isWall) continue;
     // If the closest node is at a distance of infinity,
     // we must be trapped and should therefore stop.
     if (closestNode.distance === Infinity) return visitedNodesInOrder;
@@ -31,6 +38,27 @@ export function dijkstra(grid, startNode, finishNode, method) {
     updateUnvisitedNeighbors(closestNode, grid);
   }
 }
+function depthFirstSearch(node, finishNode, grid, visitedNodesInOrder) {
+  if (node === finishNode) {
+    visitedNodesInOrder.push(node);
+    return true;
+  }
+
+  node.isVisited = true;
+  visitedNodesInOrder.push(node);
+
+  const neighbors = getUnvisitedNeighbors(node, grid);
+  for (const neighbor of neighbors) {
+    if (!neighbor.isVisited) {
+      if (depthFirstSearch(neighbor, finishNode, grid, visitedNodesInOrder)) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
 
 //Returns the unvisted node with the lowest depth + weight
 function sortNodesByDistance(unvisitedNodes) {
