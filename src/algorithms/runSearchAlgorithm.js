@@ -45,6 +45,7 @@ function dijkstraSearch(grid, startNode, finishNode, visitedNodesInOrder, unvisi
 
 function depthFirstSearch(node, finishNode, grid, visitedNodesInOrder) {
   node.isVisited = true;
+  updateUnvisitedNeighbors(node, grid);
   visitedNodesInOrder.push(node);
   if (node === finishNode) {
     return true;
@@ -59,7 +60,6 @@ function depthFirstSearch(node, finishNode, grid, visitedNodesInOrder) {
   }
   return false;
 }
-
 
 //Returns the unvisted node with the lowest depth + weight
 function sortNodesByDistance(unvisitedNodes) {
@@ -98,13 +98,17 @@ function getAllNodes(grid) {
 // Backtracks from the finishNode to find the shortest path.
 // Only works when called *after* the search method above has found the finishnode.
 export function getSolution(finishNode, grid) {
-  const nodesInShortestPathOrder = [];
+  const nodesInSolutionPath = [];
   let currentNode = finishNode;
+  console.log('currentNode.direction');
+  console.log(currentNode.row);
   let north = 1;
   let east = 2;
   let south = 3;
   let west = 4;
   while (currentNode !== null) {
+    console.log('currentNode.direction');
+    console.log(currentNode.row);
     if (currentNode.previousNode !== null)
     {
       //Record which direction it is moving
@@ -116,9 +120,9 @@ export function getSolution(finishNode, grid) {
     }
     
     //Shift to the next node.
-    nodesInShortestPathOrder.unshift(currentNode);
+    nodesInSolutionPath.unshift(currentNode);
     currentNode = currentNode.previousNode;
 
   }
-  return nodesInShortestPathOrder;
+  return nodesInSolutionPath;
 }

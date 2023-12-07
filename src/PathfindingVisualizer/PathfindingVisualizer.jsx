@@ -72,11 +72,11 @@ export default class PathfindingVisualizer extends Component {
 
   //Name: animateSearch
   //Purpose: This function displays the order that nodes were visited.
-  animateSearch(visitedNodesInOrder, nodesInShortestPathOrder) {
+  animateSearch(visitedNodesInOrder, nodesInSolutionPath) {
     for (let i = 0; i <= visitedNodesInOrder.length; i++) {
       if (i === visitedNodesInOrder.length) {
         setTimeout(() => {
-          this.animateSolution(nodesInShortestPathOrder);
+          this.animateSolution(nodesInSolutionPath);
         }, 10 * i);
         return;
       }
@@ -90,10 +90,10 @@ export default class PathfindingVisualizer extends Component {
 
   //Name: animateSolution
   //Purpose: This function displays the solution that was found.
-  animateSolution(nodesInShortestPathOrder) {
-    for (let i = 0; i < nodesInShortestPathOrder.length; i++) {
+  animateSolution(nodesInSolutionPath) {
+    for (let i = 0; i < nodesInSolutionPath.length; i++) {
       setTimeout(() => {
-        const node = nodesInShortestPathOrder[i];
+        const node = nodesInSolutionPath[i];
         const element = document.getElementById(`node-${node.row}-${node.col}`);
         if (element) {
           if (node.isFinish || node.isStart) {
@@ -133,8 +133,8 @@ export default class PathfindingVisualizer extends Component {
     const startNode = grid[START_NODE_ROW][START_NODE_COL];
     const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
     const visitedNodesInOrder = runSearchAlgorithm(grid, startNode, finishNode,SEARCH_METHOD_DEBUG);
-    const nodesInShortestPathOrder = getSolution(finishNode,grid);
-    this.animateSearch(visitedNodesInOrder, nodesInShortestPathOrder);
+    const nodesInSolutionPath = getSolution(finishNode,grid);
+    this.animateSearch(visitedNodesInOrder, nodesInSolutionPath);
   }
   handleRadioToggle = () => {
     this.setState({ placingWall: !this.state.placingWall });
