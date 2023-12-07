@@ -2,7 +2,10 @@ import React, {Component} from 'react';
 import Submenu from './Submenu';
 
 class Menu extends Component {  
+  
     render() {
+      const { searchMethod } = this.props;
+      
       return (
         <nav className="nav" id="menu-container">
           <ul className="nav__menu">
@@ -13,10 +16,10 @@ class Menu extends Component {
             </li>
             <li className="nav__menu-item">
               <button className='button-01'>Algorithms</button>
-              <Submenu />
+              <Submenu updateSearchMethod={this.props.updateSearchMethod} />
             </li>
             <li className="nav__menu-item">
-              <button className='button-01' onClick={() => this.props.visualize()}>Visualize Dijkstra </button>
+              <button className='button-01' onClick={() => this.props.visualize()}>Visualize {searchMethod} </button>
             </li>
           </ul>
         </nav>

@@ -5,17 +5,17 @@ import './Dropdown.css';
     render() {
       return (
         <ul className="nav__submenu">
-          <li className="nav__submenu-item "id='startButtonDijkstra'>
-            <button className='button-02'>Dijkstra's Algorithm</button>
+          <li className="nav__submenu-item ">
+            <button className='button-02' onClick={() => this.props.updateSearchMethod('Dijkstra')}>Dijkstra's Algorithm</button>
           </li>
-          <li className="nav__submenu-item " id='startButtonGreedy'>
-            <button className='button-02'>Depth-first Search</button>
+          <li className="nav__submenu-item ">
+            <button className='button-02' onClick={() =>  this.props.updateSearchMethod('DFS')}>Depth-first Search</button>
           </li>
-          <li className="nav__submenu-item " id='startButtonBFS'>
-            <button className='button-02'>Breadth-first Search</button>
+          <li className="nav__submenu-item " >
+            <button className='button-02' onClick={() => this.props.updateSearchMethod('BFS')}>Breadth-first Search</button>
           </li>
-          <li className="nav__submenu-item " id='startButtonAStar2'>
-            <button className='button-02'>A* Search</button>
+          <li className="nav__submenu-item ">
+            <button className='button-02' onClick={() => this.props.updateSearchMethod('A* Search')}>A* Search</button>
           </li>
         </ul>
       )

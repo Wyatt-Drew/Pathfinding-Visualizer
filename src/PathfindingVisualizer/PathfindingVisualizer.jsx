@@ -4,6 +4,7 @@ import Node from './Node/Node';
 import Menu from './Dropdown/Menu';
 import './PathfindingVisualizer.css';
 import {runSearchAlgorithm, getSolution} from '../algorithms/runSearchAlgorithm';
+import { forceUpdate } from 'react';
 //icons
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
@@ -16,10 +17,10 @@ const START_NODE_ROW = 10;
 const START_NODE_COL = 15;
 const FINISH_NODE_ROW = 10;
 const FINISH_NODE_COL = 35;
-// const SEARCH_METHOD_DEBUG = 'dijkstra';
-// const SEARCH_METHOD_DEBUG = 'depthFirstSearch';
-// const SEARCH_METHOD_DEBUG = 'breathFirstSearch';
-const SEARCH_METHOD_DEBUG = 'aStar';
+// let searchMethod = 'dijkstra';
+// const searchMethod = 'depthFirstSearch';
+// const searchMethod = 'breathFirstSearch';
+// const searchMethod = 'aStar';
 // Creating arrows
 const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 svg.style.height = "100%";
@@ -29,6 +30,7 @@ const up = <KeyboardArrowUpIcon/>;
 const left = <KeyboardArrowLeftIcon/>;
 const right = <KeyboardArrowRightIcon/>; 
 var mouseIsPressed = false;
+var searchMethod = 'dijkstra';
 
 export default class PathfindingVisualizer extends Component {
   constructor() {
@@ -134,7 +136,7 @@ export default class PathfindingVisualizer extends Component {
     const {grid} = this.state;
     const startNode = grid[START_NODE_ROW][START_NODE_COL];
     const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
-    const visitedNodesInOrder = runSearchAlgorithm(grid, startNode, finishNode,SEARCH_METHOD_DEBUG);
+    const visitedNodesInOrder = runSearchAlgorithm(grid, startNode, finishNode, searchMethod);
     const nodesInSolutionPath = getSolution(finishNode,grid);
     this.animateSearch(visitedNodesInOrder, nodesInSolutionPath);
   }
@@ -142,12 +144,17 @@ export default class PathfindingVisualizer extends Component {
     this.setState({ placingWall: !this.state.placingWall });
   };
 
+  updateSearchMethod = (method) => {
+    searchMethod = method;
+    this.forceUpdate();
+  };
+
   render() {
     const {grid, mouseIsPressed} = this.state;
 
     return (
       <>
-        <Menu visualize={this.visualize}></Menu>
+        <Menu visualize={this.visualize} updateSearchMethod={this.updateSearchMethod} searchMethod={searchMethod} />
         <div className = 'container' style={{ marginTop: '1px' }}>
                 <div className = "box"><Node isStart={true} row = {-1} col={-1}
                 onMouseDown={() => {}}onMouseEnter={() => {}}></Node>Start Node</div>
