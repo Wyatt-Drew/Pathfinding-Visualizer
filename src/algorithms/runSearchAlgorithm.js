@@ -7,7 +7,7 @@
 //for efficiency.  Here I have implemented it with an array which I sort each time because
 //we have a relatively small number of nodes.
 
-export function dijkstra(grid, startNode, finishNode, method) {
+export function runSearchAlgorithm(grid, startNode, finishNode, method) {
   const visitedNodesInOrder = [];
   const unvisitedNodes = getAllNodes(grid);
     switch (method){

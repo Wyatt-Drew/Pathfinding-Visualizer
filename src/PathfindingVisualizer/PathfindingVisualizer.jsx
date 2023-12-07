@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import Node from './Node/Node';
 import Menu from './Dropdown/Menu';
 import './PathfindingVisualizer.css';
-import {dijkstra, getNodesInShortestPathOrder} from '../algorithms/dijkstra';
+import {runSearchAlgorithm, getNodesInShortestPathOrder} from '../algorithms/runSearchAlgorithm';
 //icons
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
@@ -130,12 +130,10 @@ export default class PathfindingVisualizer extends Component {
     const {grid} = this.state;
     const startNode = grid[START_NODE_ROW][START_NODE_COL];
     const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
-    const visitedNodesInOrder = dijkstra(grid, startNode, finishNode,'depthFirstSearch');
-    // const visitedNodesInOrder = dijkstra(grid, startNode, finishNode,'dijkstra');
+    // const visitedNodesInOrder = runSearchAlgorithm(grid, startNode, finishNode,'depthFirstSearch');
+    const visitedNodesInOrder = runSearchAlgorithm(grid, startNode, finishNode,'dijkstra');
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode,grid);
     this.animateSearch(visitedNodesInOrder, nodesInShortestPathOrder);
-    // this.animateSearch(visitedNodesInOrder, nodesInShortestPathOrder);
-    //this.animateSolution(nodesInShortestPathOrder);
   }
   handleRadioToggle = () => {
     this.setState({ placingWall: !this.state.placingWall });
