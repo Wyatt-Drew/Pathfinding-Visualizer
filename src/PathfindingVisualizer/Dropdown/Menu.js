@@ -7,7 +7,9 @@ class Menu extends Component {
         <nav className="nav" id="menu-container">
           <ul className="nav__menu">
             <li className="nav__menu-item">
-              <button className='button-01' href="https://wyatt-drew.github.io/">Homepage</button>
+              <a href="https://wyatt-drew.github.io/" className='button-01' >
+                Homepage
+              </a>
             </li>
             <li className="nav__menu-item">
               <button className='button-01'>Algorithms</button>
