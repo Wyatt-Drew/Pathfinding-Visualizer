@@ -1,15 +1,11 @@
-// Performs Dijkstra's algorithm; returns *all* nodes in the order
-// in which they were visited. Also makes nodes point back to their
-// previous node, effectively allowing us to compute the shortest path
-// by backtracking from the finish node.
-
-//Note: Normally Dijkstra's algorithm would be implemented with something like a minheap 
-//for efficiency.  Here I have implemented it with an array which I sort each time because
-//we have a relatively small number of nodes.
-
+//Name: runSearchAlgorithm
+//Purpose: returns *all* nodes in the order in which they were visited. 
+//Also makes nodes point back to their previous node, effectively allowing 
+//us to compute the shortest path by backtracking from the finish node.
 export function runSearchAlgorithm(grid, startNode, finishNode, method) {
   const visitedNodesInOrder = [];
   const unvisitedNodes = getAllNodes(grid);
+  startNode.distance = 0;
     switch (method){
       case 'dijkstra':
         return dijkstraSearch(grid, startNode, finishNode, visitedNodesInOrder, unvisitedNodes);
@@ -19,18 +15,26 @@ export function runSearchAlgorithm(grid, startNode, finishNode, method) {
         depthFirstSearch(startNode, finishNode, grid, visitedNodesInOrder);
         return visitedNodesInOrder;
         break;
+      case 'breathFirstSearch':
+        break;
+      case 'aStar':
+        break;
+      default:
+        console.error('Invalid search method');
+        return [];
     }
   }
 
+//Note: Normally Dijkstra's algorithm would be implemented with something like a minheap 
+//for efficiency.  Here I have implemented it with an array which I sort each time because
+//we have a relatively small number of nodes.
 function dijkstraSearch(grid, startNode, finishNode, visitedNodesInOrder, unvisitedNodes) {
-  startNode.distance = 0;
   while (!!unvisitedNodes.length) {
     sortNodesByDistance(unvisitedNodes);
     const closestNode = unvisitedNodes.shift();
     // If we encounter a wall, we skip it.
     if (closestNode.isWall) continue;
-    // If the closest node is at a distance of infinity,
-    // we must be trapped and should therefore stop.
+    // If the closest node is at a distance of infinity, we must be trapped and should therefore stop.
     if (closestNode.distance === Infinity) return visitedNodesInOrder;
     closestNode.isVisited = true;
     visitedNodesInOrder.push(closestNode);
@@ -38,15 +42,13 @@ function dijkstraSearch(grid, startNode, finishNode, visitedNodesInOrder, unvisi
     updateUnvisitedNeighbors(closestNode, grid);
   }
 }
-function depthFirstSearch(node, finishNode, grid, visitedNodesInOrder) {
-  if (node === finishNode) {
-    visitedNodesInOrder.push(node);
-    return true;
-  }
 
+function depthFirstSearch(node, finishNode, grid, visitedNodesInOrder) {
   node.isVisited = true;
   visitedNodesInOrder.push(node);
-
+  if (node === finishNode) {
+    return true;
+  }
   const neighbors = getUnvisitedNeighbors(node, grid);
   for (const neighbor of neighbors) {
     if (!neighbor.isVisited) {
@@ -55,7 +57,6 @@ function depthFirstSearch(node, finishNode, grid, visitedNodesInOrder) {
       }
     }
   }
-
   return false;
 }
 
@@ -63,11 +64,6 @@ function depthFirstSearch(node, finishNode, grid, visitedNodesInOrder) {
 //Returns the unvisted node with the lowest depth + weight
 function sortNodesByDistance(unvisitedNodes) {
   unvisitedNodes.sort((nodeA, nodeB) => (nodeA.distance + nodeA.isWeight) - (nodeB.distance + nodeB.isWeight));
-}
-//Returns the unvisted node with the highest depth
-function sortNodesByDepth(unvisitedNodes, currentNode) {
-  //getUnvisitedNeighbors(currentNode, grid);
-  //unvisitedNodes.sort((nodeA, nodeB) => (nodeB.distance) - (nodeA.distance));
 }
 
 function updateUnvisitedNeighbors(node, grid) {
@@ -101,7 +97,7 @@ function getAllNodes(grid) {
 
 // Backtracks from the finishNode to find the shortest path.
 // Only works when called *after* the search method above has found the finishnode.
-export function getNodesInShortestPathOrder(finishNode, grid) {
+export function getSolution(finishNode, grid) {
   const nodesInShortestPathOrder = [];
   let currentNode = finishNode;
   let north = 1;

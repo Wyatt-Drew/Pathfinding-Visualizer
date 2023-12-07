@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import Node from './Node/Node';
 import Menu from './Dropdown/Menu';
 import './PathfindingVisualizer.css';
-import {runSearchAlgorithm, getNodesInShortestPathOrder} from '../algorithms/runSearchAlgorithm';
+import {runSearchAlgorithm, getSolution} from '../algorithms/runSearchAlgorithm';
 //icons
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
@@ -16,6 +16,8 @@ const START_NODE_ROW = 10;
 const START_NODE_COL = 15;
 const FINISH_NODE_ROW = 10;
 const FINISH_NODE_COL = 35;
+// const SEARCH_METHOD_DEBUG = 'dijkstra';
+const SEARCH_METHOD_DEBUG = 'depthFirstSearch';
 // Creating arrows
 const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 svg.style.height = "100%";
@@ -130,9 +132,8 @@ export default class PathfindingVisualizer extends Component {
     const {grid} = this.state;
     const startNode = grid[START_NODE_ROW][START_NODE_COL];
     const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
-    // const visitedNodesInOrder = runSearchAlgorithm(grid, startNode, finishNode,'depthFirstSearch');
-    const visitedNodesInOrder = runSearchAlgorithm(grid, startNode, finishNode,'dijkstra');
-    const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode,grid);
+    const visitedNodesInOrder = runSearchAlgorithm(grid, startNode, finishNode,SEARCH_METHOD_DEBUG);
+    const nodesInShortestPathOrder = getSolution(finishNode,grid);
     this.animateSearch(visitedNodesInOrder, nodesInShortestPathOrder);
   }
   handleRadioToggle = () => {
@@ -184,7 +185,6 @@ export default class PathfindingVisualizer extends Component {
                       mouseIsPressed={mouseIsPressed}
                       onMouseDown={(row, col) => this.handleMouseDown(row, col)}
                       onMouseEnter={(row, col) =>this.handleMouseEnter(row, col)}
-                      // onMouseUp={() => this.handleMouseUp()}
                       row={row}></Node>
                   );
                 })}
