@@ -30,7 +30,7 @@ const up = <KeyboardArrowUpIcon/>;
 const left = <KeyboardArrowLeftIcon/>;
 const right = <KeyboardArrowRightIcon/>; 
 var mouseIsPressed = false;
-var searchMethod = 'dijkstra';
+var searchMethod = 'Dijkstra';
 
 export default class PathfindingVisualizer extends Component {
   constructor() {
