@@ -177,10 +177,12 @@ export default class PathfindingVisualizer extends Component {
       for (let col = 0; col < grid[row].length; col++) {
         const node = grid[row][col];
         node.isVisited = false;
+        node.distance = Infinity;
         const element = document.getElementById(`node-${row}-${col}`);
         if (element) {
           // Check if the node is a start or finish node
           if (node.isStart) {
+            node.distance = 0;
             element.className = 'node node-start';
           } else if (node.isFinish) {
             element.className = 'node node-finish';
