@@ -18,6 +18,7 @@ export default class Node extends Component {
       row,
       direction,
       isWeight,
+      isConnected,
     } = this.props;
     // Determine the extra CSS class based on node properties
     const extraClassName = isFinish

@@ -31,7 +31,6 @@ const right = <KeyboardArrowRightIcon/>;
 //Global variables
 var mouseIsPressed = false;
 var searchMethod = 'Dijkstra';
-
 export default class PathfindingVisualizer extends Component {
   constructor() {
     super();
@@ -81,60 +80,85 @@ generateMaze = () => {
   // Create a new grid based on the existing grid
   const newGrid = grid.slice();
   // Generate the maze
-  this.recursiveDivide(newGrid, 0, 0, newGrid.length, newGrid[1].length);
+  this.createWalls(newGrid);
   // Update the state with the new grid
   this.setState({ grid: newGrid }, () => {
     console.log("Maze generated");
   });
 };
 
-createWall = (grid, startX, startY, size, divideHorizontally) => {
-  //passage position is designed to decide where along the wall there will be a door
-  //For example if the wall is vertical, this is the vertical distance before we build the door
-  let passagePosition = Math.floor(Math.random() * (size - 2)) + 1;
-  if (divideHorizontally) {
-    for (let i = 0; i < size; i++) {
-      if (i + startX < grid.length && startY < grid[i + startX].length) {
-        if (i !== passagePosition) {
-          grid[i + startX][startY].isWall = true;
-        }
-      }
-    }
-  } else {
-    for (let i = 0; i < size; i++) {
-      if (startX < grid.length && startY + i < grid[startX].length) {
-        if (i !== passagePosition) {
-          grid[startX][i + startY].isWall = true;
-        }
-      }
+createWalls = (grid) => {
+  //Make every tile a wall
+  for (let row = 0; row < grid.length; row ++) {
+    for (let col = 0; col < grid[row].length; col++) {
+      grid[row][col].isWall = true;
+      grid[row][col].isConnected = true;
     }
   }
-};
-recursiveDivide = (grid, startX, startY, endX, endY) => {
-  // Check if the space is large enough to divide
-  if (endX - startX < 2 || endY - startY < 2) {
+  //Make the center of every 3x3 sq not a wall
+  let queue = [];
+  for (let row = 0; row < grid.length; row += 2) {
+    for (let col = 1; col < grid[row].length; col += 2) {
+      grid[row][col].isWall = false;
+      grid[row][col].isConnected = false;
+      queue.push(grid[row][col]);
+    }
+  }
+  //Connect every 3x3 sq
+  this.randomPathCreator(grid, queue);
+}
+randomPathCreator(grid, queue) {
+  if (!queue.length) {
     return;
   }
-  // Choose whether to divide horizontally or vertically
-  const divideHorizontally = Math.random() < 0.5;
-  let sizeX = endX - startX;
-  let sizeY = endY - startY;
-  let wallSize = divideHorizontally ? sizeX : sizeY;
-  let baseSize = !divideHorizontally ? sizeX : sizeY;
-  let dividePosition = Math.floor(Math.random() * (baseSize - 2) + 1);
-  //Divide position is designed to decide where the wall will be built
-  //For example if the wall is vertical, this is the horizontal distance before we build the wall
-  // Recursively divide the remaining spaces
-  if (divideHorizontally) {
-    this.createWall(grid, startX, startY + dividePosition, wallSize, divideHorizontally);
-    this.recursiveDivide(grid, startX, startY, endX, startY + dividePosition - 1);
-    this.recursiveDivide(grid, startX, startY + dividePosition + 1, endX, endY);
-  } else { // Vertical line
-    this.createWall(grid, startX + dividePosition, startY, wallSize, divideHorizontally);
-    this.recursiveDivide(grid, startX, startY, startX + dividePosition - 1, endY);
-    this.recursiveDivide(grid, startX + dividePosition + 1, startY, endX, endY);
+  const curPath = queue.pop();
+  // randomize directions N, E, S, W
+  const directions = [1, 2, 3, 4].sort(() => Math.random() - 0.5);
+  while (directions.length) {
+    let direction = directions.pop();
+    let newPath = null;
+    switch (direction) {
+      case 1: // North
+        newPath = grid[curPath.row - 2]?.[curPath.col];
+        if (newPath != null && !newPath.isConnected) {
+          if (grid[newPath.row - 1]?.[newPath.col] != null) {
+            grid[newPath.row - 1][newPath.col].isWall = false;
+            newPath.isConnected = true;
+          }
+        }
+        break;
+      case 2: // East
+        newPath = grid[curPath.row]?.[curPath.col + 2];
+        if (newPath != null && !newPath.isConnected) {
+          if (grid[newPath.row]?.[newPath.col + 1] != null) {
+            grid[newPath.row][newPath.col + 1].isWall = false;
+            newPath.isConnected = true;
+          }
+        }
+        break;
+      case 3: // South
+        newPath = grid[curPath.row + 2]?.[curPath.col];
+        if (newPath != null && !newPath.isConnected) {
+          if (grid[newPath.row + 1]?.[newPath.col] != null) {
+            grid[newPath.row + 1][newPath.col].isWall = false;
+            newPath.isConnected = true;
+          }
+        }
+        break;
+      case 4: // West
+        newPath = grid[curPath.row]?.[curPath.col - 2];
+        if (newPath != null && !newPath.isConnected) {
+          if (grid[newPath.row]?.[newPath.col - 1] != null) {
+            grid[newPath.row][newPath.col - 1].isWall = false;
+            newPath.isConnected = true;
+          }
+        }
+        break;
+    }
+    this.randomPathCreator(grid, queue);
   }
-};
+}
+
   //Name: animateSearch
   //Purpose: This function displays the order that nodes were visited and the solution.
   animateSearch(visitedNodesInOrder, nodesInSolutionPath) {
