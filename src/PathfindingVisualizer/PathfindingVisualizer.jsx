@@ -154,14 +154,7 @@ export default class PathfindingVisualizer extends Component {
     this.setState(prevState => ({
       grid: prevState.grid.map(row =>
         row.map(node => {
-          let svgContent = '';
-          if (node.isFinish) {
-            svgContent = 'finish';
-          } else if (node.isStart) {
-            svgContent = 'start';
-          } else if (node.isWeight) {
-            svgContent = 'weight';
-          }
+          const content = Node.getContent(node.isFinish, node.isStart, node.isWeight);
   
           return {
             ...node,
@@ -171,6 +164,7 @@ export default class PathfindingVisualizer extends Component {
             distance: Infinity,
             previousNode: null,
             isWall: node.isWall,
+            content,
           };
         })
       ),
@@ -236,9 +230,9 @@ export default class PathfindingVisualizer extends Component {
             return (
               <div key={rowIdx}>
                 {row.map((node, nodeIdx) => {
-                  const {row, col, isFinish, isStart, isWall, isWeight, svgContent} = node;
+                  const {row, col, isFinish, isStart, isWall, isWeight, content} = node;
                   return (
-                    <Node
+                  <Node
                       key={nodeIdx}
                       col={col}
                       isFinish={isFinish}
@@ -247,8 +241,10 @@ export default class PathfindingVisualizer extends Component {
                       isWeight={isWeight}
                       mouseIsPressed={mouseIsPressed}
                       onMouseDown={(row, col) => this.handleMouseDown(row, col)}
-                      onMouseEnter={(row, col) =>this.handleMouseEnter(row, col)}
-                      row={row}></Node>
+                      onMouseEnter={(row, col) => this.handleMouseEnter(row, col)}
+                      row={row}
+                      content={content} 
+                    />
                   );
                 })}
               </div>
@@ -274,16 +270,21 @@ const getInitialGrid = () => {
 };
 
 const createNode = (col, row) => {
+  const isStart = row === START_NODE_ROW && col === START_NODE_COL;
+  const isFinish = row === FINISH_NODE_ROW && col === FINISH_NODE_COL;
+  const isWeight = false; 
+  const content = Node.getContent(isFinish, isStart, isWeight);
   return {
     col,
     row,
-    isStart: row === START_NODE_ROW && col === START_NODE_COL,
-    isFinish: row === FINISH_NODE_ROW && col === FINISH_NODE_COL,
+    isStart,
+    isFinish,
     distance: Infinity,
     isVisited: false,
     isWall: false,
-    isWeight: false,
+    isWeight,
     previousNode: null,
+    content,
   };
 };
 
