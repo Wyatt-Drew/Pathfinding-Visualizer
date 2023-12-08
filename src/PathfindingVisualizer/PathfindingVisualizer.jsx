@@ -72,8 +72,29 @@ export default class PathfindingVisualizer extends Component {
     event.preventDefault();
     mouseIsPressed= false;
   }
+  //Purpose: To randomly place weights around the grid
+  generateWeights = () => {
+    this.resetBetweenRuns();
+    const { grid } = this.state;
+    const newGrid = grid.slice();
+    let chance = 0.1;
+    for (let row = 0; row < grid.length; row ++) {
+      for (let col = 0; col < grid[row].length; col++) {
+        if(Math.random() <= chance && !grid[row][col].isWall) 
+        {
+          grid[row][col].isWeight = true
+        }
+      }
+    }
+    this.setState({ grid: newGrid }, () => {
+      console.log("Maze generated");
+    });
+  }
+
+
+
 //Name: generateMaze
-//Purpose: To create a preset maze pattern.
+//Purpose: To create a random maze pattern.
 generateMaze = () => {
   this.resetGrid();
   const { grid } = this.state;
@@ -86,13 +107,12 @@ generateMaze = () => {
     console.log("Maze generated");
   });
 };
-
 createWalls = (grid) => {
   //Make every tile a wall
   for (let row = 0; row < grid.length; row ++) {
     for (let col = 0; col < grid[row].length; col++) {
       grid[row][col].isWall = true;
-      grid[row][col].isConnected = true;
+      grid[row][col].isWeight = false;
     }
   }
   //Make the center of every 3x3 sq not a wall
@@ -107,55 +127,40 @@ createWalls = (grid) => {
   //Connect every 3x3 sq
   this.randomPathCreator(grid, queue);
 }
+//Purpose: Helper function to connect every 3x3 box to form paths
 randomPathCreator(grid, queue) {
-  if (!queue.length) {
-    return;
-  }
-  const curPath = queue.pop();
-  // randomize directions N, E, S, W
-  const directions = [1, 2, 3, 4].sort(() => Math.random() - 0.5);
-  while (directions.length) {
-    let direction = directions.pop();
-    let newPath = null;
-    switch (direction) {
-      case 1: // North
-        newPath = grid[curPath.row - 2]?.[curPath.col];
-        if (newPath != null && !newPath.isConnected) {
-          if (grid[newPath.row - 1]?.[newPath.col] != null) {
-            grid[newPath.row - 1][newPath.col].isWall = false;
-            newPath.isConnected = true;
-          }
-        }
-        break;
-      case 2: // East
-        newPath = grid[curPath.row]?.[curPath.col + 2];
-        if (newPath != null && !newPath.isConnected) {
-          if (grid[newPath.row]?.[newPath.col + 1] != null) {
-            grid[newPath.row][newPath.col + 1].isWall = false;
-            newPath.isConnected = true;
-          }
-        }
-        break;
-      case 3: // South
-        newPath = grid[curPath.row + 2]?.[curPath.col];
-        if (newPath != null && !newPath.isConnected) {
-          if (grid[newPath.row + 1]?.[newPath.col] != null) {
-            grid[newPath.row + 1][newPath.col].isWall = false;
-            newPath.isConnected = true;
-          }
-        }
-        break;
-      case 4: // West
-        newPath = grid[curPath.row]?.[curPath.col - 2];
-        if (newPath != null && !newPath.isConnected) {
-          if (grid[newPath.row]?.[newPath.col - 1] != null) {
-            grid[newPath.row][newPath.col - 1].isWall = false;
-            newPath.isConnected = true;
-          }
-        }
-        break;
+  while (queue.length) {
+    const curPath = queue.pop();
+    // randomize directions N, E, S, W
+    const directions = [1, 2, 3, 4].sort(() => Math.random() - 0.5);
+    while (directions.length) {
+      const direction = directions.pop();
+      let newPath = null;
+      switch (direction) {
+        case 1: // North
+          newPath = grid[curPath.row - 2]?.[curPath.col];
+          break;
+        case 2: // East
+          newPath = grid[curPath.row]?.[curPath.col + 2];
+          break;
+        case 3: // South
+          newPath = grid[curPath.row + 2]?.[curPath.col];
+          break;
+        case 4: // West
+          newPath = grid[curPath.row]?.[curPath.col - 2];
+          break;
+      }
+      //Remove the wall if appropriate
+      if (newPath != null && !newPath.isConnected) {
+        const wallToRemove =
+          direction % 2 === 0
+            ? grid[curPath.row][curPath.col + (direction === 2 ? 1 : -1)]
+            : grid[curPath.row + (direction === 3 ? 1 : -1)][curPath.col];
+        wallToRemove.isWall = false;
+        newPath.isConnected = true;
+        queue.push(newPath);
+      }
     }
-    this.randomPathCreator(grid, queue);
   }
 }
 
@@ -299,7 +304,8 @@ randomPathCreator(grid, queue) {
               updateSearchMethod={this.updateSearchMethod} 
               searchMethod={searchMethod} 
               resetGrid={this.resetGrid}
-              generateMaze = {this.generateMaze} ></Menu>
+              generateMaze = {this.generateMaze} 
+              generateWeights = {this.generateWeights}></Menu>
         <div className = 'container' style={{ marginTop: '1px' }}>
                 <div className = "box"><Node isStart={true} row = {-1} col={-1}
                 onMouseDown={() => {}}onMouseEnter={() => {}}></Node>Start Node</div>

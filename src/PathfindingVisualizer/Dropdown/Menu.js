@@ -25,6 +25,9 @@ class Menu extends Component {
               <button className='button-01' onClick={() => this.props.generateMaze()}>Generate Maze </button>
             </li>
             <li className="nav__menu-item">
+              <button className='button-01' onClick={() => this.props.generateWeights()}>Generate Weights </button>
+            </li>
+            <li className="nav__menu-item">
               <button className='button-01' onClick={() => this.props.resetGrid()}>Reset </button>
             </li>
           </ul>
