@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import Node from './Node/Node';
 import Menu from './Dropdown/Menu';
 import './PathfindingVisualizer.css';
-import {runSearchAlgorithm, getSolution} from '../algorithms/runSearchAlgorithm';
+import {runSearchAlgorithm, getSolution} from './algorithms/runSearchAlgorithm';
 
 // Importing icons from Material-UI library
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
