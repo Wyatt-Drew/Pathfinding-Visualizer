@@ -12,15 +12,14 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import SquareIcon from '@mui/icons-material/Square';
+import SportsScoreIcon from '@mui/icons-material/SportsScore';
+import TimeToLeaveIcon from '@mui/icons-material/TimeToLeave';
 //Constants
 const START_NODE_ROW = 10;
 const START_NODE_COL = 15;
 const FINISH_NODE_ROW = 10;
 const FINISH_NODE_COL = 35;
-// let searchMethod = 'dijkstra';
-// const searchMethod = 'depthFirstSearch';
-// const searchMethod = 'breathFirstSearch';
-// const searchMethod = 'aStar';
+
 // Creating arrows
 const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 svg.style.height = "100%";
@@ -133,6 +132,7 @@ export default class PathfindingVisualizer extends Component {
   }
 
   visualize() {
+    this.resetBetweenRuns();
     const {grid} = this.state;
     const startNode = grid[START_NODE_ROW][START_NODE_COL];
     const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
@@ -149,12 +149,66 @@ export default class PathfindingVisualizer extends Component {
     this.forceUpdate();
   };
 
+
+  resetBetweenRuns = () => {
+    this.setState(prevState => ({
+      grid: prevState.grid.map(row =>
+        row.map(node => {
+          let svgContent = '';
+          if (node.isFinish) {
+            svgContent = 'finish';
+          } else if (node.isStart) {
+            svgContent = 'start';
+          } else if (node.isWeight) {
+            svgContent = 'weight';
+          }
+  
+          return {
+            ...node,
+            isStart: node.isStart,
+            isFinish: node.isFinish,
+            isVisited: false,
+            distance: Infinity,
+            previousNode: null,
+            isWall: node.isWall,
+          };
+        })
+      ),
+    }), () => {
+      this.clearVisitedNodes();
+      this.clearShortestPath();
+      this.forceUpdate();
+    });
+  };
+
+  resetGrid = () => {
+    const newGrid = getInitialGrid();
+    this.setState({ grid: newGrid });
+    this.resetBetweenRuns();
+  };
+
+  
+  clearVisitedNodes = () => {
+    const visitedNodes = document.querySelectorAll('.node-visited');
+    visitedNodes.forEach(node => {
+      node.classList.remove('node-visited');
+    });
+  };
+  clearShortestPath = () => {
+    const pathNodes = document.querySelectorAll('.node-shortest-path');
+    pathNodes.forEach(node => {
+      node.classList.remove('node-shortest-path');
+    });
+  };
   render() {
     const {grid, mouseIsPressed} = this.state;
 
     return (
       <>
-        <Menu visualize={this.visualize} updateSearchMethod={this.updateSearchMethod} searchMethod={searchMethod} />
+        <Menu visualize={this.visualize} 
+              updateSearchMethod={this.updateSearchMethod} 
+              searchMethod={searchMethod} 
+              resetGrid={this.resetGrid} ></Menu>
         <div className = 'container' style={{ marginTop: '1px' }}>
                 <div className = "box"><Node isStart={true} row = {-1} col={-1}
                 onMouseDown={() => {}}onMouseEnter={() => {}}></Node>Start Node</div>
@@ -182,7 +236,7 @@ export default class PathfindingVisualizer extends Component {
             return (
               <div key={rowIdx}>
                 {row.map((node, nodeIdx) => {
-                  const {row, col, isFinish, isStart, isWall, isWeight} = node;
+                  const {row, col, isFinish, isStart, isWall, isWeight, svgContent} = node;
                   return (
                     <Node
                       key={nodeIdx}

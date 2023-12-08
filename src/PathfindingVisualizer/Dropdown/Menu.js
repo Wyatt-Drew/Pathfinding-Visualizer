@@ -19,7 +19,10 @@ class Menu extends Component {
               <Submenu updateSearchMethod={this.props.updateSearchMethod} />
             </li>
             <li className="nav__menu-item">
-              <button className='button-01' onClick={() => this.props.visualize()}>Visualize {searchMethod} </button>
+            <button className='button-01' onClick={() => {this.props.visualize(); }}>Visualize {searchMethod}</button>
+            </li>
+            <li className="nav__menu-item">
+              <button className='button-01' onClick={() => this.props.resetGrid()}>Reset </button>
             </li>
           </ul>
         </nav>

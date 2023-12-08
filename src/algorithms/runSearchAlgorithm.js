@@ -166,15 +166,11 @@ function getAllNodes(grid) {
 export function getSolution(finishNode, grid) {
   const nodesInSolutionPath = [];
   let currentNode = finishNode;
-  console.log('currentNode.direction');
-  console.log(currentNode.row);
   let north = 1;
   let east = 2;
   let south = 3;
   let west = 4;
   while (currentNode !== null) {
-    console.log('currentNode.direction');
-    console.log(currentNode.row);
     if (currentNode.previousNode !== null)
     {
       //Record which direction it is moving
@@ -182,13 +178,10 @@ export function getSolution(finishNode, grid) {
       if (currentNode.row > currentNode.previousNode.row) currentNode.direction = south;
       if (currentNode.col < currentNode.previousNode.col) currentNode.direction = west;
       if (currentNode.col > currentNode.previousNode.col) currentNode.direction = east;
-      console.log(currentNode.direction);
     }
-    
     //Shift to the next node.
     nodesInSolutionPath.unshift(currentNode);
     currentNode = currentNode.previousNode;
-
   }
   return nodesInSolutionPath;
 }
