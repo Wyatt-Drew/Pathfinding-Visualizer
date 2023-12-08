@@ -99,11 +99,11 @@ export default class PathfindingVisualizer extends Component {
         const node = nodesInSolutionPath[i];
         const element = document.getElementById(`node-${node.row}-${node.col}`);
         if (element) {
+          this.addSVG(element, node.direction);
           if (node.isFinish || node.isStart) {
-            element.innerHTML = "";
-          } 
+            element.removeChild(svg); //Ensures the SVG is removed from all nodes at the end
+          }
             element.className = 'node node-shortest-path';
-            this.addSVG(element, node.direction);
         }
       }, 50 * i);
     }
@@ -151,28 +151,29 @@ export default class PathfindingVisualizer extends Component {
 
 
   resetBetweenRuns = () => {
-    this.setState(prevState => ({
-      grid: prevState.grid.map(row =>
-        row.map(node => {
-          const content = Node.getContent(node.isFinish, node.isStart, node.isWeight);
+    // this.setState(prevState => ({
+    //   grid: prevState.grid.map(row =>
+    //     row.map(node => {
+    //       const content = Node.getContent(node.isFinish, node.isStart, node.isWeight);
   
-          return {
-            ...node,
-            isStart: node.isStart,
-            isFinish: node.isFinish,
-            isVisited: false,
-            distance: Infinity,
-            previousNode: null,
-            isWall: node.isWall,
-            content,
-          };
-        })
-      ),
-    }), () => {
+    //       return {
+    //         ...node,
+    //         isStart: node.isStart,
+    //         isFinish: node.isFinish,
+    //         isVisited: false,
+    //         distance: Infinity,
+    //         previousNode: null,
+    //         isWall: node.isWall,
+    //         content,
+    //       };
+    //     })
+    //   ),
+    // }), () => {
+      this.restoreStartFinishColors();
       this.clearVisitedNodes();
       this.clearShortestPath();
       this.forceUpdate();
-    });
+    // });
   };
 
   resetGrid = () => {
@@ -193,6 +194,26 @@ export default class PathfindingVisualizer extends Component {
     pathNodes.forEach(node => {
       node.classList.remove('node-shortest-path');
     });
+  };
+  restoreStartFinishColors = () => {
+    const { grid } = this.state;
+  
+    // Iterate over each row and column in the grid
+    for (let row = 0; row < grid.length; row++) {
+      for (let col = 0; col < grid[row].length; col++) {
+        const node = grid[row][col];
+        const element = document.getElementById(`node-${row}-${col}`);
+  
+        if (element) {
+          // Check if the node is a start or finish node
+          if (node.isStart) {
+            element.className = 'node node-start';
+          } else if (node.isFinish) {
+            element.className = 'node node-finish';
+          }
+        }
+      }
+    }
   };
   render() {
     const {grid, mouseIsPressed} = this.state;
