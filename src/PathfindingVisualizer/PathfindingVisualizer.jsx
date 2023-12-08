@@ -279,6 +279,7 @@ randomPathCreator(grid, queue) {
         const node = grid[row][col];
         node.isVisited = false;
         node.distance = Infinity;
+        node.previousNode = null;
         const element = document.getElementById(`node-${row}-${col}`);
         if (element) {
           // Check if the node is a start or finish node
