@@ -149,31 +149,11 @@ export default class PathfindingVisualizer extends Component {
     this.forceUpdate();
   };
 
-
   resetBetweenRuns = () => {
-    // this.setState(prevState => ({
-    //   grid: prevState.grid.map(row =>
-    //     row.map(node => {
-    //       const content = Node.getContent(node.isFinish, node.isStart, node.isWeight);
-  
-    //       return {
-    //         ...node,
-    //         isStart: node.isStart,
-    //         isFinish: node.isFinish,
-    //         isVisited: false,
-    //         distance: Infinity,
-    //         previousNode: null,
-    //         isWall: node.isWall,
-    //         content,
-    //       };
-    //     })
-    //   ),
-    // }), () => {
       this.restoreStartFinishColors();
       this.clearVisitedNodes();
       this.clearShortestPath();
       this.forceUpdate();
-    // });
   };
 
   resetGrid = () => {
@@ -182,7 +162,6 @@ export default class PathfindingVisualizer extends Component {
     this.resetBetweenRuns();
   };
 
-  
   clearVisitedNodes = () => {
     const visitedNodes = document.querySelectorAll('.node-visited');
     visitedNodes.forEach(node => {
@@ -197,13 +176,11 @@ export default class PathfindingVisualizer extends Component {
   };
   restoreStartFinishColors = () => {
     const { grid } = this.state;
-  
     // Iterate over each row and column in the grid
     for (let row = 0; row < grid.length; row++) {
       for (let col = 0; col < grid[row].length; col++) {
         const node = grid[row][col];
         const element = document.getElementById(`node-${row}-${col}`);
-  
         if (element) {
           // Check if the node is a start or finish node
           if (node.isStart) {
