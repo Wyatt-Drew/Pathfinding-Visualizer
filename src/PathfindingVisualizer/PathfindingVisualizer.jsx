@@ -72,6 +72,7 @@ export default class PathfindingVisualizer extends Component {
     event.preventDefault();
     mouseIsPressed= false;
   }
+  //Name: generateWeights
   //Purpose: To randomly place weights around the grid
   generateWeights = () => {
     this.resetBetweenRuns();
@@ -86,13 +87,8 @@ export default class PathfindingVisualizer extends Component {
         }
       }
     }
-    this.setState({ grid: newGrid }, () => {
-      console.log("Maze generated");
-    });
+    this.setState({ grid: newGrid }, null);
   }
-
-
-
 //Name: generateMaze
 //Purpose: To create a random maze pattern.
 generateMaze = () => {
@@ -103,10 +99,10 @@ generateMaze = () => {
   // Generate the maze
   this.createWalls(newGrid);
   // Update the state with the new grid
-  this.setState({ grid: newGrid }, () => {
-    console.log("Maze generated");
-  });
+  this.setState({ grid: newGrid }, null);
 };
+//Name: createWalls
+//Purpose: Helper function to handle wall logic during maze creation
 createWalls = (grid) => {
   //Make every tile a wall
   for (let row = 0; row < grid.length; row ++) {
@@ -127,6 +123,7 @@ createWalls = (grid) => {
   //Connect every 3x3 sq
   this.randomPathCreator(grid, queue);
 }
+//Name: randomPathCreator
 //Purpose: Helper function to connect every 3x3 box to form paths
 randomPathCreator(grid, queue) {
   while (queue.length) {
@@ -170,8 +167,6 @@ randomPathCreator(grid, queue) {
     for (let i = 0; i <= visitedNodesInOrder.length; i++) {
       // Iterate through visited nodes and animate them
       if (i === visitedNodesInOrder.length) {
-        console.log(i);
-        console.log("soln path length", nodesInSolutionPath.length);
         // If all visited nodes are processed, animate the solution
         setTimeout(() => {
           this.animateSolution(nodesInSolutionPath);
@@ -204,6 +199,7 @@ randomPathCreator(grid, queue) {
       }, 50 * i);
     }
   }
+  //Name: addSVG
   //Purpose: To add SVG arrows indicating the direction of the solution path 
   //Note: There is only one SVG for arrows so only one arrow can exist.
   addSVG(element, direction)
@@ -273,7 +269,8 @@ randomPathCreator(grid, queue) {
       node.classList.remove('node-shortest-path');
     });
   };
-  // Additive function to restore any traits that may have been removed or modified.
+  //Name: restoreNodeTraits
+  // Purpose: Additive function to restore any traits that may have been removed or modified.
   restoreNodeTraits = () => {
     const { grid } = this.state;
     // Iterate over each row and column in the grid
@@ -357,7 +354,8 @@ randomPathCreator(grid, queue) {
     );
   }
 }
-// Function to create the initial grid with nodes
+// Name: getInitialGrid
+// Purpose: Create the initial grid with nodes
 const getInitialGrid = () => {
   const grid = [];
   for (let row = 0; row < 20; row++) {
@@ -369,7 +367,8 @@ const getInitialGrid = () => {
   }
   return grid;
 };
-// Helper function to create nodes during grid creation
+//Name: createNode
+//Purpose: Helper function to create nodes during grid creation
 const createNode = (col, row) => {
   const isStart = row === START_NODE_ROW && col === START_NODE_COL;
   const isFinish = row === FINISH_NODE_ROW && col === FINISH_NODE_COL;
@@ -386,7 +385,8 @@ const createNode = (col, row) => {
     previousNode: null,
   };
 };
-// Function to toggle between wall and weight nodes in the grid
+// Name: getNewGridWithWallToggled
+// Purpose: Toggle between wall and weight nodes in the grid
 const getNewGridWithWallToggled = (grid, row, col,placingWall) => {
   const newGrid = grid.slice();
   const node = newGrid[row][col];

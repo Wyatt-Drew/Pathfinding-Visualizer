@@ -23,7 +23,8 @@ export function runSearchAlgorithm(grid, startNode, finishNode, method) {
         return [];
     }
   }
-
+//Name: aStar
+//Purpose: Performs the A* search algorithm on a grid to find the shortest path between start and finish nodes.
   function aStar(startNode, finishNode, grid, visitedNodesInOrder) {
     const openSet = [startNode];
     const closedSet = [];
@@ -57,7 +58,7 @@ export function runSearchAlgorithm(grid, startNode, finishNode, method) {
     return visitedNodesInOrder;
   }
   
-  // Helper function to sort nodes by A* distance (f = g + h).
+  // A* helper function to sort nodes by A* distance (f = g + h).
   function sortNodesByAStarDistance(openSet, finishNode) {
     openSet.sort(
       (nodeA, nodeB) =>
@@ -66,12 +67,13 @@ export function runSearchAlgorithm(grid, startNode, finishNode, method) {
     );
   }
   
-  // Helper function to calculate the heuristic (Manhattan distance) between two nodes.
+  // A* helper function to calculate the heuristic (Manhattan distance) between two nodes.
   function heuristic(nodeA, nodeB) {
     return Math.abs(nodeA.row - nodeB.row) + Math.abs(nodeA.col - nodeB.col);
   }
   
-
+//Name: breathFirstSearch
+//Purpose: Performs the breadth-first search algorithm on a grid to find the shortest path between start and finish nodes.
   function breathFirstSearch(startNode, finishNode, grid, visitedNodesInOrder) {
     const queue = [];
     queue.push(startNode);
@@ -90,7 +92,8 @@ export function runSearchAlgorithm(grid, startNode, finishNode, method) {
     return visitedNodesInOrder;
   }
 
-
+//Name: dijkstraSearch
+//Purpose: Performs Dijkstra's algorithm on a grid to find the shortest path between start and finish nodes.
 //Note: Normally Dijkstra's algorithm would be implemented with something like a minheap 
 //for efficiency.  Here I have implemented it with an array which I sort each time because
 //we have a relatively small number of nodes.
@@ -108,7 +111,8 @@ function dijkstraSearch(grid, startNode, finishNode, visitedNodesInOrder, unvisi
     updateUnvisitedNeighbors(closestNode, grid);
   }
 }
-
+//Name: depthFirstSearch
+//Purpose: Performs the depth-first search algorithm on a grid to find the shortest path between start and finish nodes.
 function depthFirstSearch(node, finishNode, grid, visitedNodesInOrder) {
   node.isVisited = true;
   visitedNodesInOrder.push(node);
@@ -127,11 +131,11 @@ function depthFirstSearch(node, finishNode, grid, visitedNodesInOrder) {
   return false;
 }
 
-//Returns the unvisted node with the lowest depth + weight
+// Helper function to sort nodes by distance.
 function sortNodesByDistance(unvisitedNodes) {
   unvisitedNodes.sort((nodeA, nodeB) => (nodeA.distance + nodeA.isWeight) - (nodeB.distance + nodeB.isWeight));
 }
-
+// Helper function to update unvisited neighbors' distances.
 function updateUnvisitedNeighbors(node, grid) {
   const unvisitedNeighbors = getUnvisitedNeighbors(node, grid);
   for (const neighbor of unvisitedNeighbors) {
@@ -139,7 +143,7 @@ function updateUnvisitedNeighbors(node, grid) {
     neighbor.previousNode = node;
   }
 }
-
+// Helper function to get unvisited neighbors of a node.
 function getUnvisitedNeighbors(node, grid) {
   const neighbors = [];
   const {col, row} = node;
@@ -150,7 +154,7 @@ function getUnvisitedNeighbors(node, grid) {
   if (col > 0 && !grid[row][col - 1].isWall) neighbors.push(grid[row][col - 1]); //left
   return neighbors.filter(neighbor => !neighbor.isVisited);
 }
-
+// Helper function to get all nodes in the grid.
 function getAllNodes(grid) {
   const nodes = [];
   for (const row of grid) {
@@ -161,8 +165,9 @@ function getAllNodes(grid) {
   return nodes;
 }
 
-// Backtracks from the finishNode to find the shortest path.
-// Only works when called *after* the search method above has found the finishnode.
+//Name: getSolution
+//Purpose: Backtracks from the finishNode to find the shortest path.
+//Note: Only works when called *after* the search method above has found the finish node.
 export function getSolution(finishNode, grid) {
   const nodesInSolutionPath = [];
   let currentNode = finishNode;
