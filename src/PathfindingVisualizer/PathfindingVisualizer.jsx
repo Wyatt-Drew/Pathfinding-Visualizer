@@ -4,7 +4,6 @@ import Node from './Node/Node';
 import Menu from './Dropdown/Menu';
 import './PathfindingVisualizer.css';
 import {runSearchAlgorithm, getSolution} from '../algorithms/runSearchAlgorithm';
-import { forceUpdate } from 'react';
 //icons
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
@@ -12,8 +11,7 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import SquareIcon from '@mui/icons-material/Square';
-import SportsScoreIcon from '@mui/icons-material/SportsScore';
-import TimeToLeaveIcon from '@mui/icons-material/TimeToLeave';
+
 //Constants
 const START_NODE_ROW = 10;
 const START_NODE_COL = 15;
@@ -78,6 +76,8 @@ export default class PathfindingVisualizer extends Component {
   animateSearch(visitedNodesInOrder, nodesInSolutionPath) {
     for (let i = 0; i <= visitedNodesInOrder.length; i++) {
       if (i === visitedNodesInOrder.length) {
+        console.log(i);
+        console.log("soln path length", nodesInSolutionPath.length);
         setTimeout(() => {
           this.animateSolution(nodesInSolutionPath);
         }, 10 * i);
@@ -126,7 +126,6 @@ export default class PathfindingVisualizer extends Component {
         ReactDOM.render(left, svg);
         break;
     }
-
     // Add the SVG container to the document
     element.appendChild(svg);
   }
@@ -148,20 +147,17 @@ export default class PathfindingVisualizer extends Component {
     searchMethod = method;
     this.forceUpdate();
   };
-
+  resetGrid = () => {
+    const newGrid = getInitialGrid();
+    this.setState({ grid: newGrid });
+    this.resetBetweenRuns();
+  };
   resetBetweenRuns = () => {
       this.restoreStartFinishColors();
       this.clearVisitedNodes();
       this.clearShortestPath();
       this.forceUpdate();
   };
-
-  resetGrid = () => {
-    const newGrid = getInitialGrid();
-    this.setState({ grid: newGrid });
-    this.resetBetweenRuns();
-  };
-
   clearVisitedNodes = () => {
     const visitedNodes = document.querySelectorAll('.node-visited');
     visitedNodes.forEach(node => {
@@ -180,6 +176,7 @@ export default class PathfindingVisualizer extends Component {
     for (let row = 0; row < grid.length; row++) {
       for (let col = 0; col < grid[row].length; col++) {
         const node = grid[row][col];
+        node.isVisited = false;
         const element = document.getElementById(`node-${row}-${col}`);
         if (element) {
           // Check if the node is a start or finish node

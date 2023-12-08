@@ -7,16 +7,16 @@ export function runSearchAlgorithm(grid, startNode, finishNode, method) {
   const unvisitedNodes = getAllNodes(grid);
   startNode.distance = 0;
     switch (method){
-      case 'Dijkstra':
+      case 'Dijkstra'://weighted
         return dijkstraSearch(grid, startNode, finishNode, visitedNodesInOrder, unvisitedNodes);
-      case 'DFS':
+      case 'DFS'://Unweighted
         //Depth first search priority: up, right, down, left
         depthFirstSearch(startNode, finishNode, grid, visitedNodesInOrder);
         return visitedNodesInOrder;
-      case 'BFS':
+      case 'BFS'://unweighted
         breathFirstSearch(startNode, finishNode, grid, visitedNodesInOrder);
         return visitedNodesInOrder;
-      case 'A* Search':
+      case 'A* Search'://Weighted
         return aStar(startNode, finishNode, grid, visitedNodesInOrder);
       default:
         console.error('Invalid search method');
