@@ -4,7 +4,8 @@ import Node from './Node/Node';
 import Menu from './Dropdown/Menu';
 import './PathfindingVisualizer.css';
 import {runSearchAlgorithm, getSolution} from '../algorithms/runSearchAlgorithm';
-//icons
+
+// Importing icons from Material-UI library
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
@@ -26,6 +27,8 @@ const down = <KeyboardArrowDownIcon/>;
 const up = <KeyboardArrowUpIcon/>;
 const left = <KeyboardArrowLeftIcon/>;
 const right = <KeyboardArrowRightIcon/>; 
+
+//Global variables
 var mouseIsPressed = false;
 var searchMethod = 'Dijkstra';
 
@@ -39,13 +42,14 @@ export default class PathfindingVisualizer extends Component {
     };
     this.visualize = this.visualize.bind(this);
   }
-
+  // Initialize the grid and add event listeners
   componentDidMount() {
     const grid = getInitialGrid();
     this.setState({grid});
     document.addEventListener("mousedown", this.handleClick);
     document.addEventListener("mouseup", this.handleMouseUp);
   }
+  // Functions to handle mouse events for placing walls or weights
   //Note: Even though it might seem like these two functions should be one.
   //This handleClick and handleMouseDown work together to ensure responsiveness.
   //handleClick() circumvents default browser behaviour which prevents events when
@@ -65,24 +69,26 @@ export default class PathfindingVisualizer extends Component {
     const newGrid = getNewGridWithWallToggled(this.state.grid, row, col, this.state.placingWall);
     this.setState({grid: newGrid});
   }
-  
   handleMouseUp(event) {
     event.preventDefault();
     mouseIsPressed= false;
   }
 
   //Name: animateSearch
-  //Purpose: This function displays the order that nodes were visited.
+  //Purpose: This function displays the order that nodes were visited and the solution.
   animateSearch(visitedNodesInOrder, nodesInSolutionPath) {
     for (let i = 0; i <= visitedNodesInOrder.length; i++) {
+      // Iterate through visited nodes and animate them
       if (i === visitedNodesInOrder.length) {
         console.log(i);
         console.log("soln path length", nodesInSolutionPath.length);
+        // If all visited nodes are processed, animate the solution
         setTimeout(() => {
           this.animateSolution(nodesInSolutionPath);
         }, 10 * i);
         return;
       }
+      // Animate each visited node
       setTimeout(() => {
         const node = visitedNodesInOrder[i];
         document.getElementById(`node-${node.row}-${node.col}`).className =
@@ -92,7 +98,7 @@ export default class PathfindingVisualizer extends Component {
   }
 
   //Name: animateSolution
-  //Purpose: This function displays the solution that was found.
+  //Purpose: Helper function that displays the solution that was found.
   animateSolution(nodesInSolutionPath) {
     for (let i = 0; i < nodesInSolutionPath.length; i++) {
       setTimeout(() => {
@@ -108,7 +114,8 @@ export default class PathfindingVisualizer extends Component {
       }, 50 * i);
     }
   }
-
+  //Purpose: To add SVG arrows indicating the direction of the solution path 
+  //Note: There is only one SVG for arrows so only one arrow can exist.
   addSVG(element, direction)
   {
     switch (direction)
@@ -129,7 +136,7 @@ export default class PathfindingVisualizer extends Component {
     // Add the SVG container to the document
     element.appendChild(svg);
   }
-
+  // Function to initiate the search algorithm and visualization
   visualize() {
     this.resetBetweenRuns();
     const {grid} = this.state;
@@ -139,38 +146,45 @@ export default class PathfindingVisualizer extends Component {
     const nodesInSolutionPath = getSolution(finishNode,grid);
     this.animateSearch(visitedNodesInOrder, nodesInSolutionPath);
   }
+  // Toggle function for changing between placing walls or weights
   handleRadioToggle = () => {
     this.setState({ placingWall: !this.state.placingWall });
   };
-
+  // Function to update the search algorithm method
   updateSearchMethod = (method) => {
     searchMethod = method;
     this.forceUpdate();
   };
+  // Function to completely reset the grid to its initial state.
   resetGrid = () => {
     const newGrid = getInitialGrid();
     this.setState({ grid: newGrid });
     this.resetBetweenRuns();
   };
+  // Function to partially reset the grid between algorithm runs.
+  // This does not include walls or weights
   resetBetweenRuns = () => {
-      this.restoreStartFinishColors();
+      this.restoreNodeTraits();
       this.clearVisitedNodes();
       this.clearShortestPath();
       this.forceUpdate();
   };
+  // Function to clear visited nodes
   clearVisitedNodes = () => {
     const visitedNodes = document.querySelectorAll('.node-visited');
     visitedNodes.forEach(node => {
       node.classList.remove('node-visited');
     });
   };
+  // Function to clear the shortest path
   clearShortestPath = () => {
     const pathNodes = document.querySelectorAll('.node-shortest-path');
     pathNodes.forEach(node => {
       node.classList.remove('node-shortest-path');
     });
   };
-  restoreStartFinishColors = () => {
+  // Additive function to restore any traits that may have been removed or modified.
+  restoreNodeTraits = () => {
     const { grid } = this.state;
     // Iterate over each row and column in the grid
     for (let row = 0; row < grid.length; row++) {
@@ -252,7 +266,7 @@ export default class PathfindingVisualizer extends Component {
   }
 
 }
-
+// Function to create the initial grid with nodes
 const getInitialGrid = () => {
   const grid = [];
   for (let row = 0; row < 20; row++) {
@@ -264,7 +278,7 @@ const getInitialGrid = () => {
   }
   return grid;
 };
-
+// Helper function to create nodes during grid creation
 const createNode = (col, row) => {
   const isStart = row === START_NODE_ROW && col === START_NODE_COL;
   const isFinish = row === FINISH_NODE_ROW && col === FINISH_NODE_COL;
@@ -281,7 +295,7 @@ const createNode = (col, row) => {
     previousNode: null,
   };
 };
-
+// Function to toggle between wall and weight nodes in the grid
 const getNewGridWithWallToggled = (grid, row, col,placingWall) => {
   const newGrid = grid.slice();
   const node = newGrid[row][col];
