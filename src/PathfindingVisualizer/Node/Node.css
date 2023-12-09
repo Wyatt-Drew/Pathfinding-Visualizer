@@ -1,19 +1,14 @@
-
-
 .node {
-  width: 3vh;
-  height: 3vh;
+  width: 1.5vw;
+  height: 1.5vw;
   outline: 1px solid rgb(175, 216, 248);
   display: inline-block;
   vertical-align: top;
-  padding-right: 0.2vh;
-  padding-left: 0.2vh;
-  padding-top: 0.2vh;
-  padding-bottom: 0.2vh;
+  padding: 0.1vw;
 }
 .node-svg {
-  width: 3vh !important;
-  height: 3vh !important;
+  width: 1.5vw !important;
+  height: 1.5vw !important;
   display: block !important;
 }
 .node-finish {
