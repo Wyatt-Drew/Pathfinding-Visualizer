@@ -18,6 +18,7 @@
   
   &:hover {
     background: #2984ec;
+    z-index: -1;
   }
 }
 

@@ -14,9 +14,9 @@ import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import SquareIcon from '@mui/icons-material/Square';
 
 //Constants
-const START_NODE_ROW = 10;
+const START_NODE_ROW = 11;
 const START_NODE_COL = 15;
-const FINISH_NODE_ROW = 10;
+const FINISH_NODE_ROW = 11;
 const FINISH_NODE_COL = 35;
 
 // Creating arrows
@@ -113,7 +113,7 @@ createWalls = (grid) => {
   }
   //Make the center of every 3x3 sq not a wall
   let queue = [];
-  for (let row = 0; row < grid.length; row += 2) {
+  for (let row = 1; row < grid.length; row += 2) {
     for (let col = 1; col < grid[row].length; col += 2) {
       grid[row][col].isWall = false;
       grid[row][col].isConnected = false;
@@ -359,9 +359,9 @@ randomPathCreator(grid, queue) {
 // Purpose: Create the initial grid with nodes
 const getInitialGrid = () => {
   const grid = [];
-  for (let row = 0; row < 20; row++) {
+  for (let row = 0; row < 23; row++) {
     const currentRow = [];
-    for (let col = 0; col < 50; col++) {
+    for (let col = 0; col < 51; col++) {
       currentRow.push(createNode(col, row));
     }
     grid.push(currentRow);
