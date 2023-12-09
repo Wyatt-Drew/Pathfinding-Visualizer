@@ -2,16 +2,18 @@
   margin: 0;
   font-size: 0;
   white-space: nowrap;
+  margin-top: 6vh;
 }
 .container {
   display: flex;
   flex-direction: row;
   justify-content: center;
   width: 100%;
-  margin: 6vh;
+  font-size: calc(3vmin);
+  /* margin: 6vh; */
 }
 .box {
-  width: calc(20% - 2vw); /* 20% - 10px gutter */
+  width: calc(20% - 2vw);
   background-color: #ccc;
 }
 /* toggle bettween options in header */
@@ -19,7 +21,7 @@ input[type="radio"]{
 	-webkit-appearance:none;
 }
 label{
-  width: 10%;
+  width: 10vw;
   flex-direction: row;
 	border:1px solid black;
 	border-radius: 10px;
