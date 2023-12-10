@@ -10,6 +10,8 @@
   position: relative;
 }
 .node-svg {
+  margin-left: -0.1vw;
+  margin-top: -0.1vw;
   width: 1.5vw !important;
   height: 1.5vw !important;
   display: block !important;
