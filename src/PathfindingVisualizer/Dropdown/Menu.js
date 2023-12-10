@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Submenu from './Submenu';
+import DropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 class Menu extends Component {  
   
@@ -28,7 +29,7 @@ class Menu extends Component {
             <button className='button-01' onClick={() => {this.props.visualize(); }}>Visualize {searchMethod}</button>
             </li>
             <li className="nav__menu-item">
-              <button className='button-01'>Algorithms</button>
+              <button className='button-01'>Algorithms<DropDownIcon></DropDownIcon></button>
               <Submenu updateSearchMethod={this.props.updateSearchMethod} />
             </li>
           </ul>
