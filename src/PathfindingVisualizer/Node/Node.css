@@ -6,6 +6,8 @@
   display: inline-block;
   vertical-align: top; 
   padding: 0.1vw;
+  z-index: 1;
+  position: relative;
 }
 .node-svg {
   width: 1.5vw !important;
