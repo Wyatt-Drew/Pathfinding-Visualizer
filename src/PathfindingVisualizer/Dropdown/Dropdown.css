@@ -9,6 +9,7 @@
 .nav__submenu {
   padding-inline-start: 0px;
   width: 30vh;
+  min-width: 30px;
   display: none;
   position: absolute;
   background-color: #00aeef;

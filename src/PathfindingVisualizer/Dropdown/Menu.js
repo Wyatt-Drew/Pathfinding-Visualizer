@@ -15,12 +15,9 @@ class Menu extends Component {
               </a>
             </li>
             <li className="nav__menu-item">
-              <button className='button-01'>Algorithms</button>
-              <Submenu updateSearchMethod={this.props.updateSearchMethod} />
+              <button className='button-01' onClick={() => this.props.resetGrid()}>Reset </button>
             </li>
-            <li className="nav__menu-item">
-            <button className='button-01' onClick={() => {this.props.visualize(); }}>Visualize {searchMethod}</button>
-            </li>
+
             <li className="nav__menu-item">
               <button className='button-01' onClick={() => this.props.generateMaze()}>Generate Maze </button>
             </li>
@@ -28,7 +25,11 @@ class Menu extends Component {
               <button className='button-01' onClick={() => this.props.generateWeights()}>Generate Weights </button>
             </li>
             <li className="nav__menu-item">
-              <button className='button-01' onClick={() => this.props.resetGrid()}>Reset </button>
+            <button className='button-01' onClick={() => {this.props.visualize(); }}>Visualize {searchMethod}</button>
+            </li>
+            <li className="nav__menu-item">
+              <button className='button-01'>Algorithms</button>
+              <Submenu updateSearchMethod={this.props.updateSearchMethod} />
             </li>
           </ul>
         </nav>
