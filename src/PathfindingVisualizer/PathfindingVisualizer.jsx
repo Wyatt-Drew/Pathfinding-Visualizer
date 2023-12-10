@@ -10,8 +10,10 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
-import SquareIcon from '@mui/icons-material/Square';
+import WeightIcon from '@mui/icons-material/FitnessCenter';
+import WallIcon from '@mui/icons-material/Square';
+import FinishIcon from '@mui/icons-material/SportsScore';
+import StartIcon from '@mui/icons-material/TimeToLeave';
 
 //Constants
 const START_NODE_ROW = 11;
@@ -305,24 +307,20 @@ randomPathCreator(grid, queue) {
               generateMaze = {this.generateMaze} 
               generateWeights = {this.generateWeights}></Menu>
         <div className = 'container' style={{ marginTop: '1px' }}>
-                <div className = "box"><Node isStart={true} row = {-1} col={-1}
-                onMouseDown={() => {}}onMouseEnter={() => {}}></Node>Start Node</div>
-                <div className = "box"><Node isFinish={true} row = {-1} col={-1}
-                onMouseDown={() => {}}onMouseEnter={() => {}}></Node>Target Node</div>
-                <div className = "box"><Node isWeight={true} row = {-1} col={-1}
-                onMouseDown={() => {}}onMouseEnter={() => {}}></Node>Weight Node</div>
-                <div className = "box"><Node isWall={true} row = {-1} col={-1}
-                onMouseDown={() => {}}onMouseEnter={() => {}}></Node>Wall Node</div>
+                <div className = "box"><StartIcon class = "node-start node-header"></StartIcon>Start Node</div>
+                <div className = "box"><FinishIcon class = "node-finish node-header"></FinishIcon>Target Node</div>
+                <div className = "box"><WeightIcon class = "node-header"></WeightIcon>Weight Node</div>
+                <div className = "box"><WallIcon class = "node-header"></WallIcon>Wall Node</div>
         </div>
         <div className = "container">
             <input type="radio" name="placing" id="Wall" checked={this.state.placingWall}onChange={this.handleRadioToggle}/>
               <label htmlFor="Wall" id = "wallButton">
-                    <i aria-hidden="true"><SquareIcon></SquareIcon>Wall</i> 
+                    <i aria-hidden="true"><WallIcon></WallIcon>Wall</i> 
               </label>
               <div></div>
               <input type="radio" name="placing" id="Weight" checked={!this.state.placingWall}onChange={this.handleRadioToggle}/>
               <label htmlFor="Weight" id = "weightButton">
-              <i aria-hidden="true"><FitnessCenterIcon></FitnessCenterIcon>Weight</i>	
+              <i aria-hidden="true"><WeightIcon></WeightIcon>Weight</i>	
               </label> 
         </div>
 

@@ -19,7 +19,7 @@
   
   &:hover {
     background: #2984ec;
-    z-index: -1;
+    z-index: -10;
   }
 }
 

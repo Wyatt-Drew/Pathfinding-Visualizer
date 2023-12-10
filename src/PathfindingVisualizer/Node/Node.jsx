@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import './Node.css';
-import SportsScoreIcon from '@mui/icons-material/SportsScore';
-import TimeToLeaveIcon from '@mui/icons-material/TimeToLeave';
-import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
+import FinishIcon from '@mui/icons-material/SportsScore';
+import StartIcon from '@mui/icons-material/TimeToLeave';
+import WeightIcon from '@mui/icons-material/FitnessCenter';
 
 // Node component representing a single node in the pathfinding grid
 export default class Node extends Component {
@@ -32,9 +32,9 @@ export default class Node extends Component {
       : '';
 
      // Determine the SVG content of the node based on its type (start, finish, weight)
-    const nodeContent = isFinish ? <SportsScoreIcon className="node-svg"></SportsScoreIcon>
-    :isStart ? <TimeToLeaveIcon className="node-svg"></TimeToLeaveIcon>
-    :isWeight ? <FitnessCenterIcon className="node-svg"></FitnessCenterIcon>
+    const nodeContent = isFinish ? <FinishIcon className="node-svg"></FinishIcon>
+    :isStart ? <StartIcon className="node-svg"></StartIcon>
+    :isWeight ? <WeightIcon className="node-svg"></WeightIcon>
     : null;
     // Render the Node component with appropriate styles and event handlers
     return (
