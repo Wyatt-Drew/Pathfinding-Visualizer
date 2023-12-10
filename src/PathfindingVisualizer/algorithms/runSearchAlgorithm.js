@@ -171,6 +171,7 @@ function getAllNodes(grid) {
 export function getSolution(finishNode, grid) {
   const nodesInSolutionPath = [];
   let currentNode = finishNode;
+  if (currentNode.previousNode == null) {return [];} 
   let north = 1;
   let east = 2;
   let south = 3;
