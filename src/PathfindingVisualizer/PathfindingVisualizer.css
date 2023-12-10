@@ -15,6 +15,9 @@
 .box {
   width: calc(20% - 2vw);
   background-color: #ccc;
+  display: flex;
+  align-items: center; 
+  justify-content: center;
 }
 /* toggle bettween options in header */
 input[type="radio"]{
