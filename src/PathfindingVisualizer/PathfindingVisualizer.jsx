@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-import Node from './Node/Node';
+import Node from './Grid/Node/Node';
 import Menu from './Dropdown/Menu';
+import Grid from './Grid/Grid';
 import './PathfindingVisualizer.css';
 import {runSearchAlgorithm, getSolution} from './algorithms/runSearchAlgorithm';
 
@@ -323,32 +324,12 @@ randomPathCreator(grid, queue) {
               <i aria-hidden="true"><WeightIcon></WeightIcon>Weight</i>	
               </label> 
         </div>
-
-        <div className="grid">
-          {grid.map((row, rowIdx) => {
-            return (
-              <div key={rowIdx}>
-                {row.map((node, nodeIdx) => {
-                  const {row, col, isFinish, isStart, isWall, isWeight} = node;
-                  return (
-                  <Node
-                      key={nodeIdx}
-                      col={col}
-                      isFinish={isFinish}
-                      isStart={isStart}
-                      isWall={isWall}
-                      isWeight={isWeight}
-                      mouseIsPressed={mouseIsPressed}
-                      onMouseDown={(row, col) => this.handleMouseDown(row, col)}
-                      onMouseEnter={(row, col) => this.handleMouseEnter(row, col)}
-                      row={row}
-                    />
-                  );
-                })}
-              </div>
-            );
-          })}
-        </div>
+        <Grid
+          grid={grid}
+          mouseIsPressed={mouseIsPressed}
+          handleMouseDown={this.handleMouseDown}
+          handleMouseEnter={this.handleMouseEnter}
+        />
       </>
     );
   }
