@@ -62,19 +62,20 @@ export default class PathfindingVisualizer extends Component {
     event.preventDefault();
     mouseIsPressed= true;
   }
-  handleMouseDown(row, col) {
+  handleMouseDown = (row, col) => {
     const newGrid = getNewGridWithWallToggled(this.state.grid, row, col, this.state.placingWall);
-    this.setState({grid: newGrid});
-  }
-  handleMouseEnter(row, col) {
-    if (!mouseIsPressed) return;
+    this.setState({ grid: newGrid, mouseIsPressed: true });
+  };
+
+  handleMouseEnter = (row, col) => {
+    if (!this.state.mouseIsPressed) return;
     const newGrid = getNewGridWithWallToggled(this.state.grid, row, col, this.state.placingWall);
-    this.setState({grid: newGrid});
-  }
-  handleMouseUp(event) {
-    event.preventDefault();
-    mouseIsPressed= false;
-  }
+    this.setState({ grid: newGrid });
+  };
+
+  handleMouseUp = () => {
+    this.setState({ mouseIsPressed: false });
+  };
   //Name: generateWeights
   //Purpose: To randomly place weights around the grid
   generateWeights = () => {
