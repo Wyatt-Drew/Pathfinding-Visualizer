@@ -5,13 +5,10 @@ import Menu from './Dropdown/Menu';
 import Grid from './Grid/Grid';
 import './PathfindingVisualizer.css';
 import {runSearchAlgorithm, getSolution} from './algorithms/runSearchAlgorithm';
-import {getNewGridWithWallToggled, getInitialGrid, clearVisitedNodes, clearShortestPath, restoreNodeTraits} from './Grid/Grid';
+import {getNewGridWithWallToggled, getInitialGrid, clearVisitedNodes, clearShortestPath, restoreNodeTraits,
+  animateSearch} from './Grid/Grid';
 
 // Importing icons from Material-UI library
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import WeightIcon from '@mui/icons-material/FitnessCenter';
 import WallIcon from '@mui/icons-material/Square';
 import FinishIcon from '@mui/icons-material/SportsScore';
@@ -23,14 +20,7 @@ export const START_NODE_COL = 15;
 export const FINISH_NODE_ROW = 11;
 export const FINISH_NODE_COL = 35;
 
-// Creating arrows
-const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-svg.style.height = "100%";
-svg.style.width = "100%";
-const down = <KeyboardArrowDownIcon/>;
-const up = <KeyboardArrowUpIcon/>;
-const left = <KeyboardArrowLeftIcon/>;
-const right = <KeyboardArrowRightIcon/>; 
+
 
 //Global variables
 var mouseIsPressed = false;
@@ -166,68 +156,6 @@ randomPathCreator(grid, queue) {
     }
   }
 }
-
-  //Name: animateSearch
-  //Purpose: This function displays the order that nodes were visited and the solution.
-  animateSearch(visitedNodesInOrder, nodesInSolutionPath) {
-    for (let i = 0; i <= visitedNodesInOrder.length; i++) {
-      // Iterate through visited nodes and animate them
-      if (i === visitedNodesInOrder.length) {
-        // If all visited nodes are processed, animate the solution
-        setTimeout(() => {
-          this.animateSolution(nodesInSolutionPath);
-        }, 10 * i);
-        return;
-      }
-      // Animate each visited node
-      setTimeout(() => {
-        const node = visitedNodesInOrder[i];
-        document.getElementById(`node-${node.row}-${node.col}`).className =
-          'node node-visited';
-      }, 10 * i);
-    }
-  }
-
-  //Name: animateSolution
-  //Purpose: Helper function that displays the solution that was found.
-  animateSolution(nodesInSolutionPath) {
-    for (let i = 0; i < nodesInSolutionPath.length; i++) {
-      setTimeout(() => {
-        const node = nodesInSolutionPath[i];
-        const element = document.getElementById(`node-${node.row}-${node.col}`);
-        if (element) {
-          this.addSVG(element, node.direction);
-          if (node.isFinish || node.isStart) {
-            element.removeChild(svg); //Ensures the SVG is removed from all nodes at the end
-          }
-            element.className = 'node node-shortest-path';
-        }
-      }, 50 * i);
-    }
-  }
-  //Name: addSVG
-  //Purpose: To add SVG arrows indicating the direction of the solution path 
-  //Note: There is only one SVG for arrows so only one arrow can exist.
-  addSVG(element, direction)
-  {
-    switch (direction)
-    {
-      case 1:
-        ReactDOM.render(up, svg);
-        break;
-      case 2:
-        ReactDOM.render(right, svg);
-        break;
-      case 3:
-        ReactDOM.render(down, svg);
-        break;
-      case 4:
-        ReactDOM.render(left, svg);
-        break;
-    }
-    // Add the SVG container to the document
-    element.appendChild(svg);
-  }
   // Function to initiate the search algorithm and visualization
   visualize() {
     this.resetBetweenRuns();
@@ -236,7 +164,7 @@ randomPathCreator(grid, queue) {
     const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
     const visitedNodesInOrder = runSearchAlgorithm(grid, startNode, finishNode, searchMethod);
     const nodesInSolutionPath = getSolution(finishNode,grid);
-    this.animateSearch(visitedNodesInOrder, nodesInSolutionPath);
+    animateSearch(visitedNodesInOrder, nodesInSolutionPath);
   }
   // Toggle function for changing between placing walls or weights
   handleRadioToggle = () => {

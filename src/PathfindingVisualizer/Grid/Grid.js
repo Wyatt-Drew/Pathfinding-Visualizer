@@ -2,6 +2,23 @@
 import React from 'react';
 import Node from './Node/Node'; // Import the Node component
 import {START_NODE_ROW, START_NODE_COL, FINISH_NODE_ROW, FINISH_NODE_COL} from '../PathfindingVisualizer';
+import ReactDOM from 'react-dom';
+
+// Importing icons from Material-UI library
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+
+// Creating arrows
+const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+svg.style.height = "100%";
+svg.style.width = "100%";
+const down = <KeyboardArrowDownIcon/>;
+const up = <KeyboardArrowUpIcon/>;
+const left = <KeyboardArrowLeftIcon/>;
+const right = <KeyboardArrowRightIcon/>; 
+
 // Name: getInitialGrid
 // Purpose: Create the initial grid with nodes
 export const getInitialGrid = () => {
@@ -85,6 +102,67 @@ export const restoreNodeTraits = (grid) => {
   }
 };
 
+
+  //Name: animateSearch
+  //Purpose: This function displays the order that nodes were visited and the solution.
+  export const animateSearch = (visitedNodesInOrder, nodesInSolutionPath) => {
+    for (let i = 0; i <= visitedNodesInOrder.length; i++) {
+      // Iterate through visited nodes and animate them
+      if (i === visitedNodesInOrder.length) {
+        // If all visited nodes are processed, animate the solution
+        setTimeout(() => {
+          animateSolution(nodesInSolutionPath);
+        }, 10 * i);
+        return;
+      }
+      // Animate each visited node
+      setTimeout(() => {
+        const node = visitedNodesInOrder[i];
+        document.getElementById(`node-${node.row}-${node.col}`).className =
+          'node node-visited';
+      }, 10 * i);
+    }
+  }
+
+  //Name: animateSolution
+  //Purpose: Helper function that displays the solution that was found.
+  const animateSolution = (nodesInSolutionPath) => {
+    for (let i = 0; i < nodesInSolutionPath.length; i++) {
+      setTimeout(() => {
+        const node = nodesInSolutionPath[i];
+        const element = document.getElementById(`node-${node.row}-${node.col}`);
+        if (element) {
+          addSVG(element, node.direction);
+          if (node.isFinish || node.isStart) {
+            element.removeChild(svg); //Ensures the SVG is removed from all nodes at the end
+          }
+            element.className = 'node node-shortest-path';
+        }
+      }, 50 * i);
+    }
+  }
+  //Name: addSVG
+  //Purpose: To add SVG arrows indicating the direction of the solution path 
+  //Note: There is only one SVG for arrows so only one arrow can exist.
+  const addSVG = (element, direction) => {
+    switch (direction)
+    {
+      case 1:
+        ReactDOM.render(up, svg);
+        break;
+      case 2:
+        ReactDOM.render(right, svg);
+        break;
+      case 3:
+        ReactDOM.render(down, svg);
+        break;
+      case 4:
+        ReactDOM.render(left, svg);
+        break;
+    }
+    // Add the SVG container to the document
+    element.appendChild(svg);
+  }
 
 const Grid = ({ grid, mouseIsPressed, handleMouseDown, handleMouseEnter }) => {
   return (
