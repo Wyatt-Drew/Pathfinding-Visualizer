@@ -5,6 +5,7 @@ import Menu from './Dropdown/Menu';
 import Grid from './Grid/Grid';
 import './PathfindingVisualizer.css';
 import {runSearchAlgorithm, getSolution} from './algorithms/runSearchAlgorithm';
+import {getNewGridWithWallToggled, getInitialGrid, clearVisitedNodes, clearShortestPath, restoreNodeTraits} from './Grid/Grid';
 
 // Importing icons from Material-UI library
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -17,10 +18,10 @@ import FinishIcon from '@mui/icons-material/SportsScore';
 import StartIcon from '@mui/icons-material/TimeToLeave';
 
 //Constants
-const START_NODE_ROW = 11;
-const START_NODE_COL = 15;
-const FINISH_NODE_ROW = 11;
-const FINISH_NODE_COL = 35;
+export const START_NODE_ROW = 11;
+export const START_NODE_COL = 15;
+export const FINISH_NODE_ROW = 11;
+export const FINISH_NODE_COL = 35;
 
 // Creating arrows
 const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -34,6 +35,7 @@ const right = <KeyboardArrowRightIcon/>;
 //Global variables
 var mouseIsPressed = false;
 var searchMethod = 'Dijkstra';
+
 export default class PathfindingVisualizer extends Component {
   constructor() {
     super();
@@ -254,49 +256,12 @@ randomPathCreator(grid, queue) {
   // Function to partially reset the grid between algorithm runs.
   // This does not include walls or weights
   resetBetweenRuns = () => {
-      this.restoreNodeTraits();
-      this.clearVisitedNodes();
-      this.clearShortestPath();
+      restoreNodeTraits(this.state.grid);
+      clearVisitedNodes(this.state.grid);
+      clearShortestPath(this.state.grid);
       this.forceUpdate();
   };
-  // Function to clear visited nodes
-  clearVisitedNodes = () => {
-    const visitedNodes = document.querySelectorAll('.node-visited');
-    visitedNodes.forEach(node => {
-      node.classList.remove('node-visited');
-    });
-  };
-  // Function to clear the shortest path
-  clearShortestPath = () => {
-    const pathNodes = document.querySelectorAll('.node-shortest-path');
-    pathNodes.forEach(node => {
-      node.classList.remove('node-shortest-path');
-    });
-  };
-  //Name: restoreNodeTraits
-  // Purpose: Additive function to restore any traits that may have been removed or modified.
-  restoreNodeTraits = () => {
-    const { grid } = this.state;
-    // Iterate over each row and column in the grid
-    for (let row = 0; row < grid.length; row++) {
-      for (let col = 0; col < grid[row].length; col++) {
-        const node = grid[row][col];
-        node.isVisited = false;
-        node.distance = Infinity;
-        node.previousNode = null;
-        const element = document.getElementById(`node-${row}-${col}`);
-        if (element) {
-          // Check if the node is a start or finish node
-          if (node.isStart) {
-            node.distance = 0;
-            element.className = 'node node-start';
-          } else if (node.isFinish) {
-            element.className = 'node node-finish';
-          }
-        }
-      }
-    }
-  };
+
   render() {
     const {grid, mouseIsPressed} = this.state;
 
@@ -335,48 +300,3 @@ randomPathCreator(grid, queue) {
     );
   }
 }
-// Name: getInitialGrid
-// Purpose: Create the initial grid with nodes
-const getInitialGrid = () => {
-  const grid = [];
-  for (let row = 0; row < 23; row++) {
-    const currentRow = [];
-    for (let col = 0; col < 51; col++) {
-      currentRow.push(createNode(col, row));
-    }
-    grid.push(currentRow);
-  }
-  return grid;
-};
-//Name: createNode
-//Purpose: Helper function to create nodes during grid creation
-const createNode = (col, row) => {
-  const isStart = row === START_NODE_ROW && col === START_NODE_COL;
-  const isFinish = row === FINISH_NODE_ROW && col === FINISH_NODE_COL;
-  const isWeight = false; 
-  return {
-    col,
-    row,
-    isStart,
-    isFinish,
-    distance: Infinity,
-    isVisited: false,
-    isWall: false,
-    isWeight,
-    previousNode: null,
-  };
-};
-// Name: getNewGridWithWallToggled
-// Purpose: Toggle between wall and weight nodes in the grid
-const getNewGridWithWallToggled = (grid, row, col,placingWall) => {
-  const newGrid = grid.slice();
-  const node = newGrid[row][col];
-  const newNode = {
-    ...node,
-    isWall: (!node.isWall  && placingWall),
-    isWeight: (!node.isWeight && !placingWall),
-  };
-  newGrid[row][col] = newNode;
-  return newGrid;
-};
-
